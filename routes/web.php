@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\ArtworkController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,11 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-
-Route::get('/home', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -26,5 +24,6 @@ Route::get('/dashboard', function () {
 
 Route::resource('artists', ArtistController::class);
 
-Route::resource('artworks', ArtistController::class);
-
+//artworks is nested into artist, correspond to uris like:
+//artists/{artist}/artworks/{artwork}
+Route::resource('artists.artworks', ArtworkController::class);

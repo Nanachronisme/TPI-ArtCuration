@@ -7,12 +7,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateArtistRequest;
+use App\Models\Artist;
 use Illuminate\Http\Request;
 
 class ArtistController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Redirects to the Artist Search page
      *
      * @return \Illuminate\Http\Response
      */
@@ -28,7 +30,7 @@ class ArtistController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.create-artist');
     }
 
     /**
@@ -37,18 +39,33 @@ class ArtistController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateArtistRequest $request)
     {
-        //
+            // Retrieve the validated input data...
+            $request->validated();
+
+            //the create method will automatically save the result
+            //the slug will be automatically generated after creation of the asset
+            $teacher = Artist::create([
+                'artist_name' => $request->input('artistName'),
+                'original_name' => $request->input('originalName'),
+                'birth_date' => $request->input('nickName'),
+                'death_date' => $request->input('nickName'),
+                'description' => $request->input('description'),
+            ]);
+            
+            dd($artist);
+            
+            return redirect('/artists');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
         //
     }
@@ -56,22 +73,22 @@ class ArtistController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-        //
+        return view('admin.edit-artist');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
         //
     }
@@ -79,10 +96,10 @@ class ArtistController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
         //
     }

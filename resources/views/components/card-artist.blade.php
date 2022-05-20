@@ -4,7 +4,7 @@
     <div class="flex flex-col items-center">
         <a href="test" class="hover:bg-gray-200">
         </a>
-            <img class="mb-3 object-cover h-48" src="{{ $image }}"
+            <img class="mb-3 object-cover h-56" src="{{ $image }}"
                 alt="Bonnie image">
         {{-- I don't know why but the component doesnt display special characters, it only works if htmlspecialchars_decode is used --}}
         <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ $artist_name }}</h5>  

@@ -19,9 +19,12 @@ class HomeController extends Controller
     public function index()
     {
         $artists = Artist::all();
-        $artworks = Artwork::latest()->limit(10);
+        $artworks = Artwork::latest();
         $types = Type::all() ;
-        $tags = Tag::all();
+        $tags = Tag::all(); //trier par popularité :bSELECT Count('artist_id') ORDER BY COUNT('artist_id') DESC
+
+        ;
+
 
         return view('home', ['tags' => $tags, 'artists' => $artists, 'artworks' => $artworks, 'categories' => $types ]);
     }
