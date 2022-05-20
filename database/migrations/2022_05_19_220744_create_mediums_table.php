@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('mediums', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 30); 
+            $table->string('name', 30);
             $table->timestamps();
         });
     }

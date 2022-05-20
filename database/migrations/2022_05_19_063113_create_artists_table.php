@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Artwork;
+use App\Models\Country;
+use App\Models\Tag;
+use App\Models\TimePeriod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

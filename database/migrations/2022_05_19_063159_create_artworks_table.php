@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Artist;
+use App\Models\Type;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,6 +17,7 @@ return new class extends Migration
     {
         Schema::create('artworks', function (Blueprint $table) {
             $table->id();
+            $table->string('slug', 320);
             $table->string('title', 255);
             $table->string('original_title', 255)->nullable();
             $table->string('dimensions', 255)->nullable();
@@ -23,6 +26,8 @@ return new class extends Migration
             $table->string('image_path', 2048); //TODO verify length, corresponds to maximum file path
             $table->string('creation_date', 20);
             $table->string('copyright', 64);
+            $table->foreignIdFor(Artist::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Type::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
