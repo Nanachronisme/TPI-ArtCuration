@@ -17,4 +17,14 @@ class Country extends Model
     protected $fillable = [
         'name',
     ];
+
+    /**
+     * Get the artists from the same country
+     *
+     */
+    public function artists()
+    {
+        $this->hasMany(Artist::class);
+    }
+    
 }

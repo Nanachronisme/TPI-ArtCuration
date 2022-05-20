@@ -83,4 +83,13 @@ class Artist extends Model
         return $this->hasMany(Tag::class);
     }
 
+    /**
+     * Get the artist Time Period
+     *
+     */
+    public function timePeriods()
+    {
+        return $this->belongsToMany(TimePeriod::class);
+    }
+
 }

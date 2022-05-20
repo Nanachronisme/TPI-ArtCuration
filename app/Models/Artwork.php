@@ -90,6 +90,15 @@ class Artwork extends Model
         return $this->belongsToMany(Medium::class);
     }
 
+    /**
+     * Get the artwork tags
+     *
+     */
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
+
 
 
 }
