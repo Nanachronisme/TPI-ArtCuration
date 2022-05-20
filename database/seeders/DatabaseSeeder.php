@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Artist;
 use App\Models\Artwork;
+use App\Models\Tag;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
 
         Artist::factory(10)->create();
         Artwork::factory(60)->create();
+        Tag::factory(30)->create();
 
         // \App\Models\User::factory(10)->create();
 
