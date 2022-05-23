@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\TimePeriod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +23,8 @@ class ArtistFactory extends Factory
             'birth_date' => $this->faker->date(),
             'death_date' => $this->faker->date(), 
             'description' => $this->faker->paragraph(),
-            'created_at'=> now()
+            'created_at'=> now(),
         ];
     }
+
 }

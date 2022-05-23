@@ -31,11 +31,11 @@ class ConstantsTableSeeder extends Seeder
         ]);
 
         DB::table('time_periods')->insert([
-            [ 'name' => '2000-Now'],
-            [ 'name' => '1900-1999'],
-            [ 'name' => '1800-1899'],
-            [ 'name' => '1700-1799'],
-            [ 'name' => '1600-1699'],
+            [ 'period' => '2000-Now'],
+            [ 'period' => '1900-1999'],
+            [ 'period' => '1800-1899'],
+            [ 'period' => '1700-1799'],
+            [ 'period' => '1600-1699'],
         ]);
 
         DB::table('mediums')->insert([

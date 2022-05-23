@@ -27,8 +27,9 @@ class ArtworkFactory extends Factory
             'image_path' => 'https://picsum.photos/' . (string)rand(200,900) . '/' . (string)rand(200,900), //permits to have different ipsum images
             'creation_date' => $this->faker->date(),
             'copyright' => $this->faker->text(64), 
-            'artist_id' => Artist::all()->random()->id, //use random foreign id
-            'type_id' => Type::all()->random()->id,
+            'artist_id' =>  Artist::pluck('id')->random(), //choose random artist
+            'type_id' => Type::pluck('id')->random(),
+            //'timePeriod_id' => Artist::where('id', $artistId),
             'created_at'=> now()
         ];
     }
