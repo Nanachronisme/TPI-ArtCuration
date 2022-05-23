@@ -24,6 +24,8 @@ Route::get('/dashboard', function () {
 
 Route::resource('artists', ArtistController::class);
 
-//artworks is nested into artist, correspond to uris like:
+//artworks is nested into artist, it correspond to uris like:
 //artists/{artist}/artworks/{artwork}
 Route::resource('artists.artworks', ArtworkController::class);
+
+require __DIR__.'/auth.php';
