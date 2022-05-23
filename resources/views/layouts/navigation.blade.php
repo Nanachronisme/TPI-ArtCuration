@@ -16,14 +16,16 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        Search
+                        Advanced Search
                     </x-nav-link>
- 
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        Random Artist
+                    </x-nav-link>
                 </div>
             </div>
 
             <!-- Search -->
-            <form class="flex items-center item-stretch w-full" action="#" method="get">
+            <form class="flex items-center item-stretch w-1/2" action="#" method="get">
                 <input  type="search" name="search" id="search" placeholder="Search Artists, Artworks..."
                     value="{{ request('search') }}"
                     class ="bg-transparent placeholder-black font-semibold text-sm w-full">
@@ -42,11 +44,15 @@
                                 {{ __('Log Out') }}
                             </x-button-link>
                         </form>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 
+                    @else
+                        <x-button-link :href="route('login')" color="gray">
+                                {{ __('Login') }}
+                        </x-button-link>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
+                        <x-button-link :href="route('register')" color="gray">
+                                {{ __('Register') }}
+                        </x-button-link>
                         @endif
                     @endauth
                 </div>

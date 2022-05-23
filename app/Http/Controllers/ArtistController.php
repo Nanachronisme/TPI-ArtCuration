@@ -9,6 +9,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateArtistRequest;
 use App\Models\Artist;
+use App\Models\Country;
+use App\Models\TimePeriod;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class ArtistController extends Controller
@@ -20,7 +23,8 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        //
+        $artists = Artist::all();
+        return view('search.search-artists', ['artists' => $artists]);
     }
 
     /**
@@ -30,7 +34,10 @@ class ArtistController extends Controller
      */
     public function create()
     {
-        return view('admin.create-artist');
+        $categories = Type::all();
+        $timePeriods = TimePeriod::all();
+        $countries = Country::all();
+        return view('admin.create-artist', ['categories' => $categories, 'timePeriods' => $timePeriods, 'countries' => $countries]);
     }
 
     /**
@@ -41,22 +48,22 @@ class ArtistController extends Controller
      */
     public function store(CreateArtistRequest $request)
     {
-            // Retrieve the validated input data...
-            $request->validated();
+        // Retrieve the validated input data...
+        $request->validated();
 
-            //the create method will automatically save the result
-            //the slug will be automatically generated after creation of the asset
-            $teacher = Artist::create([
-                'artist_name' => $request->input('artistName'),
-                'original_name' => $request->input('originalName'),
-                'birth_date' => $request->input('nickName'),
-                'death_date' => $request->input('nickName'),
-                'description' => $request->input('description'),
-            ]);
-            
-            dd($artist);
-            
-            return redirect('/artists');
+        //the create method will automatically save the result
+        //the slug will be automatically generated after creation of the asset
+        $artist = Artist::create([
+            'artist_name' => $request->input('artistName'),
+            'original_name' => $request->input('originalName'),
+            'birth_date' => $request->input('birthDate'),
+            'death_date' => $request->input('deathDate'),
+            'description' => $request->input('description'),
+        ]);
+        
+        //dd($artist);
+        
+        return redirect('/artists');
     }
 
     /**
@@ -67,7 +74,7 @@ class ArtistController extends Controller
      */
     public function show($slug)
     {
-        //
+        return view('show-artist', $slug);
     }
 
     /**
@@ -78,7 +85,14 @@ class ArtistController extends Controller
      */
     public function edit($slug)
     {
-        return view('admin.edit-artist');
+        $artist = Artist::where("id", $slug)->firstOrFail();
+        $data = [
+            'artist' => $artist, //TODO change all to slugs after testing
+            'countries' => Country::all(),
+            'categories' => Type::all(),
+            'timePeriods' => TimePeriod::all(),
+        ];
+        return view('admin.edit-artist')->with($data);
     }
 
     /**
@@ -88,9 +102,26 @@ class ArtistController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $slug)
+    public function update(CreateArtistRequest $request, $slug)
     {
-        //
+        // Retrieve the validated input data...
+        $request->validated();
+
+        $artist = Artist::where("id", $slug)->firstOrFail();
+
+        //the slug will be automatically update because of the "onUpdate" config in sluggable/config.php
+        $artist->update([
+            'artist_name' => $request->input('artistName'),
+            'original_name' => $request->input('originalName'),
+            'birth_date' => $request->input('birthDate'),
+            'death_date' => $request->input('deathDate'),
+            'description' => $request->input('description'),
+        ]);
+
+        $artist->save();
+
+        return redirect()->route('artists.show', $artist->slug);
+
     }
 
     /**

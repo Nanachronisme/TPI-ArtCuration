@@ -13,7 +13,7 @@ class CreateArtistRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true; //TODO set false for unauthorized users
     }
 
     /**
@@ -26,17 +26,19 @@ class CreateArtistRequest extends FormRequest
         return [
             //fields required for creating and updating artists
             //the max value required are taken from the max database values
-            'artist_name' => 'required|string|max:130',
-            'original_name' => 'string|max:130',
-            'birth_date' => 'nullable:max:20',
-            'death_date' => 'nullable:max:20',
+            'artistName' => 'required|string|max:130',
+            'originalName' => 'string|max:130',
+            'birthDate' => 'nullable:max:20',
+            'deathDate' => 'nullable:max:20',
             'description' => 'nullable',
             'website1' => 'nullable',
             'website2' => 'nullable',
             'website3' => 'nullable',
             'website4' => 'nullable',
             'website5' => 'nullable',
-            'slug' => 'alpha_dash', 'unique:artists'
+            'slug' => 'alpha_dash', 'unique:artists',
+            'timePeriod' => 'required',
+            'countries' => 'nullable'
         ];
     }
 }

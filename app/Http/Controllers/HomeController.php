@@ -23,9 +23,15 @@ class HomeController extends Controller
         $types = Type::all() ;
         $tags = Tag::all(); //trier par popularité :bSELECT Count('artist_id') ORDER BY COUNT('artist_id') DESC
 
-        ;
-
+        //dd(Artist::first()->timePeriods, Artist::first()->countries);
+        //dd($artists->first()->artworks->first()->image_path);
+        //dd( $artists->first()->timePeriods );
 
         return view('home', ['tags' => $tags, 'artists' => $artists, 'artworks' => $artworks, 'categories' => $types ]);
+    }
+
+    public function random()
+    {
+        //insert function to return random artist.
     }
 }

@@ -50,7 +50,7 @@ class ArtworkController extends Controller
      */
     public function show($slug)
     {
-        //
+        return view('show-artwork');
     }
 
     /**

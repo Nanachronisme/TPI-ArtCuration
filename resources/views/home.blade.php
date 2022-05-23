@@ -15,12 +15,17 @@
                     
                     <h1 class="mb-2 text-3xl">Latest Artworks</h1>
 
+                    
                     <div class="grid mb-4 grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
                         @foreach ($artists as $artist)
-                            <x-card-artist image="{{ $artist->artworks->first()->image_path }}" 
-                                           artist_name="{{ $artist->artist_name }}"
-                                           original_name="{{ $artist->original_name }}">
-                            </x-card-artist>
+                            @if(isset($artist->artworks->first()->image_path)) {{-- //TODO Only artists with available images can be shown with that component, make an alternate version for artists without artworks  --}}
+                                <x-card-artist image="{{ $artist->artworks->first()->image_path }}" 
+                                            artist_name="{{ $artist->artist_name }}"
+                                            original_name="{{ $artist->original_name }}">
+                                </x-card-artist>
+                            @else
+                                <p> {{$artist->artist_name}}</p>
+                            @endif
                         @endforeach
                     </div>
 
