@@ -71,7 +71,7 @@ class Artist extends Model
      */
     public function countries()
     {
-        return $this->hasMany(Country::class);
+        return $this->belongsToMany(Country::class);
     }
 
     /**
@@ -89,7 +89,7 @@ class Artist extends Model
      */
     public function timePeriods()
     {
-        return $this->belongsToMany(TimePeriod::class);
+        return $this->belongsToMany(TimePeriod::class, 'artist_time_period');
     }
 
 }

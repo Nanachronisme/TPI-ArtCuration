@@ -33,7 +33,7 @@ class TimePeriod extends Model
      */
     public function artworks()
     {
-        $this->hasMany(Artist::class);
+        $this->hasMany(Artwork::class);
     }
 
 

@@ -25,7 +25,8 @@ class Artwork extends Model
         'description',
         'image_path',
         'creation_date',
-        'copyright'
+        'copyright',
+        'timePeriod_id'
     ];
 
     /**
