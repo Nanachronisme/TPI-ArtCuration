@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Artwork;
+use App\Models\Medium;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('artwork_medium', function (Blueprint $table) {
             $table->foreignIdFor(Artwork::class)->constrained()->onDelete('cascade');
-            $table->foreignId('medium_id')->references('id')->on('mediums')->onDelete('cascade'); //the specificity was required since laravel does not recognise the naming scheme here
+            $table->foreignIdFor(Medium::class, 'medium_id')->onDelete('cascade'); //the specificity was required since laravel does not recognise the medium naming scheme
             $table->timestamps();
         });
     }

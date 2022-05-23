@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Artist;
+use App\Models\TimePeriod;
 use App\Models\Type;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->string('copyright', 64);
             $table->foreignIdFor(Artist::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Type::class)->constrained()->onDelete('cascade');
+            //$table->foreignIdFor(TimePeriod::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
