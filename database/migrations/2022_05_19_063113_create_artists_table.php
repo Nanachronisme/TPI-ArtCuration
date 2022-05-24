@@ -19,8 +19,9 @@ return new class extends Migration
     {
         Schema::create('artists', function (Blueprint $table) {
             $table->id();
-            $table->string('slug', 140)->unique();
+            //Slug needs to be nullable since we're using SluggableObserver::SAVED in model
             $table->string('artist_name', 130);
+            $table->string('slug', 140)->unique()->nullable(); 
             $table->string('original_name', 130)->nullable();
             $table->string('birth_date', 20)->nullable();
             $table->string('death_date', 20)->nullable();
