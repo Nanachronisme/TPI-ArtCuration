@@ -24,7 +24,7 @@ class Tag extends Model
      */
     public function artists()
     {
-        return $this->belongsToMany(Artist::class);
+        return $this->hasMany(Artist::class);
     }
 
     /**
