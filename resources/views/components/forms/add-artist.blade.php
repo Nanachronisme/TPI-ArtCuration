@@ -43,7 +43,7 @@
     <span>
         <div class="text-lg">Time Period</div>
         <div class="text-sm mb-2">The artist's active time period</div>
-        <select class="mb-2 w-48" name="timePeriod">
+        <select class="mb-2 w-48" name="timePeriods">
             <option value="">Time Period</option>
             @foreach ( $timePeriods as $timePeriod )
                 <option value="{{ $timePeriod->id }}" 
@@ -62,7 +62,7 @@
     <div class="mb-4">
         <div class="text-lg">Country</div>
         <div class="text-sm mb-2">The country of appartenance or artist's ethnicity</div>
-        <select class="mb-2" name="Country">
+        <select class="mb-2" name="countries">
             <option value="">Country</option>
             @foreach ( $countries as $country )
                 <option value="{{ $country->id }}" 
@@ -92,7 +92,8 @@
             <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-300 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                 https://
             </span>
-            <input type="url" class="px-4 mr-4 rounded-none rounded-r-md" placeholder="Add artist personal website or related websites"/>
+            <input type="url" name="website" class="px-4 mr-4 rounded-none rounded-r-md" placeholder="Add artist personal website or related websites" 
+                    value="@isset($artist) {{$artist->websites()->first()}} @endisset"/> {{--//TODO add multiple websites selection--}}
             <x-button type="button">Add</x-button>
         </div>
     </div>

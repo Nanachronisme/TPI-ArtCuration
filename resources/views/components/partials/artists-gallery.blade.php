@@ -1,10 +1,5 @@
 {{-- //TODO make it so it can accept arrays giving artists as collection makes an error --}}
 
-@props('artists')
-
-@foreach ($artists as $artist)
-        <x-card-artist image="{{ $artist->artworks->first()->image_path }}" 
-                    artist_name="{{ $artist->artist_name }}"
-                    original_name="{{ $artist->original_name }}">
-        </x-card-artist>
-@endforeach
+<div class="grid mb-4 grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {{ $slot }}
+</div>

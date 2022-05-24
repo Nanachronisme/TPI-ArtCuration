@@ -10,5 +10,9 @@
         <div class="flex flex-col justify-center mb-4">
             <h2 class="text-xl text-center text-white">Advanced Search</h2>
         </div>
+        <div class="flex">
+            <x-button>Artist</x-button>
+            <x-button>Artwork</x-button>
+        </div>
     </div>
 </header>
