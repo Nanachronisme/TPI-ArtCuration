@@ -92,4 +92,20 @@ class Artist extends Model
         return $this->belongsToMany(TimePeriod::class, 'artist_time_period');
     }
 
+    /**
+     * returns a collection with all the artist's websites
+     *
+     * @return Collection
+     */
+    public function websites()
+    {
+        return $websites = collect([
+            'website1' => $this->website1,
+            'website2' => $this->website2,
+            'website3' => $this->website3,
+            'website4' => $this->website4,
+            'website5' => $this->website5
+        ]);
+    }
+
 }
