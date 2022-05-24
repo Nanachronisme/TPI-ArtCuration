@@ -29,14 +29,20 @@ class DatabaseSeeder extends Seeder
 
         //Insertion of informations in pivot Tables, better solutions might exist but I did not find them yet. 
         //I did not find another suitable way to do so
-        Artist::factory(10)->create()->each(function (Artist $artist){
+        Artist::factory(10)->create()->each(function ($artist){
             //many to many relationships can only be defined afterthe artist
             $artist->timePeriods()->sync( TimePeriod::pluck('id')->random());
             $artist->countries()->sync( Country::pluck('id')->random());
             $artist->tags()->sync( Tag::pluck('id')->random(5));
         });
 
-        Artwork::factory(60)->create();
+        
+        Artwork::factory(10)->create()->each(function ($artwork){
+            //chooses a random timePeriod from the author's available timePeriods
+            $artwork->timePeriod()->associate(TimePeriod::find(Artist::find($artwork->artist_id)->timePeriods->pluck('id')->random()));
+            $artwork->tags()->sync( Tag::pluck('id')->random(5));
+            $artwork->save(); //ABSOLUMENT METTRE SAVE SINON ASSOCIATE NE FONCTIONNE PAS
+        });
 
     }
 }
