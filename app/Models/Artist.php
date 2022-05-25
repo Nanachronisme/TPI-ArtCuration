@@ -56,6 +56,28 @@ class Artist extends Model
         return 'slug';
     }
 
+
+
+    /**
+     * Permits search filtering
+     *
+     * @param $query
+     * @param array $filters
+     * @return void
+     */
+    public function scopeFilter($query, array $filters)
+    {
+        //searching filters using queryBuilder when() function 
+        $query->when($filters['searchArtists'] ?? false, function ($query, $search)
+        {
+            $query
+                ->where('artist_name', 'like', '%' . $search . '%')
+                ->orWhere('original_name', 'like', '%' . $search . '%');
+        });
+
+    }
+
+    
     /**
      * Get the artist's artworks
      *
