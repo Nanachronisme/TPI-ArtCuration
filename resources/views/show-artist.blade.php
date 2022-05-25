@@ -5,7 +5,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="flex flex-col justify-center items-center">
             <div class="div h-2/5">
-                <img class="mb-3 h-" src="https://picsum.photos/800/500" {{-- //TODO replace with artwork --}}
+                <img class="mb-3" src="{{ $artist->artworks->first()->image_path }}" {{-- //TODO replace with artwork --}}
                     alt="Bonnie image">
             </div>
             <h1 class="text-3xl">{{{$artist->artist_name}}}</h1>
@@ -59,13 +59,23 @@
                     @endforeach
                     </span>
                 </div>
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col">
                     <div class="text-2xl">
                         Description :
                     </div>
-                    <div class="">
+                    <div class="mb-4">
                         {{$artist->description}}
                     </div>
+                </div>
+                <h2 class="text-3xl mb-2">Artworks</h2>
+                <div class="grid mb-4 grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                    @foreach ($artist->artworks as $artwork)
+                        <x-card-artwork artistSlug="{{$artist->slug}}"
+                                        artworkSlug="{{$artwork->slug}}"
+                                        image="{{$artwork->image_path}}"
+                                        >
+                        </x-card-artwork>
+                    @endforeach
                 </div>
             </div>
         </div>
