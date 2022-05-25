@@ -33,7 +33,7 @@ class Tag extends Model
      */
     public function artworks()
     {
-        return $this->belongsToMany(Artwork::class);
+        return $this->hasMany(Artwork::class);
     }
 
 
