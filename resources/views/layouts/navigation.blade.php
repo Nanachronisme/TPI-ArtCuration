@@ -27,7 +27,7 @@
             <!-- Search -->
             <form class="flex items-center item-stretch w-1/2" action="#" method="get">
                 <input  type="search" name="search" id="search" placeholder="Search Artists, Artworks..."
-                    value="{{ request('search') }}"
+                    value="{{ request('searchArtists') }}"
                     class ="bg-transparent placeholder-black font-semibold text-sm w-full">
             </form>
 

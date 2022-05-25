@@ -111,7 +111,7 @@
     </div>
 
     </span>
-        {{-- //TODO change find a way to request current route with more elegance --}}
+        {{-- //TODO find a way to request current route with more elegance --}}
         <x-button type="submit" name="btnSubmit">{{ str_contains(request()->route()->getName(), 'edit') ? 'Edit' : 'Add Artist' }}</x-button>
     </span>
 
