@@ -8,7 +8,7 @@
                 <h1 class="mb-2 text-3xl">Add Artist</h1>
                 <x-forms.add-artist route="{{ route('artists.update', $artist->slug) }}" 
                                     :categories="$categories" 
-                                    :timePeriods="$timePeriods" 
+                                    :timePeriods="$timePeriods"
                                     :countries="$countries"
                                     :artist="$artist"
                                     method='PUT'>
