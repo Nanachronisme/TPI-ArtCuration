@@ -5,8 +5,14 @@
  * Description: 
  */
 
+//TODO add another param slug to function docs
+
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
+use App\Models\Artwork;
+use App\Models\Medium;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class ArtworkController extends Controller
@@ -18,7 +24,11 @@ class ArtworkController extends Controller
      */
     public function index()
     {
-        //
+        return view('search.search-artists', [
+            'artists' => Artwork::latest()
+                ->filter(request(['search']))
+                ->paginate(10) 
+        ]);
     }
 
     /**
@@ -26,9 +36,14 @@ class ArtworkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($artistSlug)
     {
-        return view('admin.create-artwork');
+        $data = [
+            'artist' => Artist::where('slug', $artistSlug)->firstOrFail(),
+            'categories' => Type::all(),
+            'mediums' => Medium::all()
+        ];
+        return view('admin.create-artwork')->with($data);
     }
 
     /**
@@ -48,9 +63,14 @@ class ArtworkController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function show($artistSlug, $artworkSlug)
     {
-        return view('show-artwork');
+        $data = [
+            'artwork' => Artwork::where('slug', $artworkSlug)->firstOrFail(),
+            'artist' => Artist::where('slug', $artistSlug)->firstOrFail()
+        ];
+        //dd($data['artwork']);
+        return view('show-artwork')->with($data);
     }
 
     /**
@@ -59,9 +79,16 @@ class ArtworkController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function edit($slug)
+    public function edit($artistSlug, $artworkSlug)  
     {
-        return view('admin.edit-artwork');
+        $data = [
+            'artist' => Artist::where("slug", $artistSlug)->firstOrFail(),
+            'artwork' => Artwork::where("slug", $artworkSlug)->firstOrFail(),
+            'categories' => Type::all(),
+            'mediums' => Medium::all()
+        ];
+        //dd($data['artwork']);
+        return view('admin.edit-artwork')->with($data);
     }
 
     /**
@@ -71,9 +98,27 @@ class ArtworkController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $slug)
+    public function update(Request $request, $artistSlug, $artworkSlug)
     {
-        //
+        $artwork = Artwork::where("slug", $artworkSlug)->firstOrFail();
+        
+        $request->validated();
+        //the slug will be automatically update because of the "onUpdate" config in sluggable/config.php
+        $artwork->update([
+            'title' => $request->input('artistName'),
+            'original_title' => $request->input('originalName'),
+            'creation_date' => $request->input('creationDate'),
+            'dimensions' => $request->input('dimensions'),
+            'description' => $request->input('description'),
+            'source_link' => $request->input('sourceLink'),
+            'image_path' => $request->input('imagePath'),
+            $artwork->timePeriod()->associate([$request->timePeriods]),
+            $artwork->tags()->sync([$request->tags])
+        ]);
+        
+        $artwork->save(); //the save method is required to generate the new slug
+
+        return redirect()->route('artists.artworks.show', $artistSlug, $artwork->slug);
     }
 
     /**

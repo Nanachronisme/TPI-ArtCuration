@@ -23,8 +23,16 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        $artists = Artist::all();
-        return view('search.search-artists', ['artists' => $artists]);
+        //in case an artist has no artworks
+        $placeholder = 'https://via.placeholder.com/900';
+
+        //dd(Artist::first()->artworks->first()->image_path);
+        return view('search.search-artists', [
+            'artists' => Artist::latest()
+                    ->filter(request(['search']))
+                    ->paginate(12),
+            'placeholder' => $placeholder
+        ]);
     }
 
     /**
@@ -34,10 +42,12 @@ class ArtistController extends Controller
      */
     public function create()
     {
-        $categories = Type::all();
-        $timePeriods = TimePeriod::all();
-        $countries = Country::all();
-        return view('admin.create-artist', ['categories' => $categories, 'timePeriods' => $timePeriods, 'countries' => $countries]);
+        $data = [
+            'categories' => Type::all(),
+            'timePeriods' => TimePeriod::all(),
+            'countries' => Country::all()
+        ];
+        return view('admin.create-artist')->with($data); //TODO uniformise the passing of data, with() or , $data)
     }
 
     /**
@@ -61,9 +71,11 @@ class ArtistController extends Controller
             'description' => $request->input('description'),
         ]);
         
-        //dd($artist);
+        //foreign key requests should be done after a save so artist id is already created
+        $artist->timePeriods()->attach($request->timePeriods); 
+        $artist->countries()->attach($request->countries); 
         
-        return redirect('/artists');
+        return redirect()->route('artists.show', $artist->slug);
     }
 
     /**
@@ -74,7 +86,9 @@ class ArtistController extends Controller
      */
     public function show($slug)
     {
-        return view('show-artist', $slug);
+        $artist = Artist::where('slug', $slug)->firstOrFail();  
+        
+        return view('show-artist')->with('artist', $artist);
     }
 
     /**
@@ -85,13 +99,15 @@ class ArtistController extends Controller
      */
     public function edit($slug)
     {
-        $artist = Artist::where("id", $slug)->firstOrFail();
         $data = [
-            'artist' => $artist, //TODO change all to slugs after testing
+            'artist' => Artist::where("slug", $slug)->firstOrFail(), //TODO change all to slugs after testing
             'countries' => Country::all(),
             'categories' => Type::all(),
             'timePeriods' => TimePeriod::all(),
         ];
+
+        //dd($artist->websites()->first());
+
         return view('admin.edit-artist')->with($data);
     }
 
@@ -104,11 +120,10 @@ class ArtistController extends Controller
      */
     public function update(CreateArtistRequest $request, $slug)
     {
-        // Retrieve the validated input data...
+        
+        $artist = Artist::where("slug", $slug)->firstOrFail();
+        
         $request->validated();
-
-        $artist = Artist::where("id", $slug)->firstOrFail();
-
         //the slug will be automatically update because of the "onUpdate" config in sluggable/config.php
         $artist->update([
             'artist_name' => $request->input('artistName'),
@@ -116,9 +131,12 @@ class ArtistController extends Controller
             'birth_date' => $request->input('birthDate'),
             'death_date' => $request->input('deathDate'),
             'description' => $request->input('description'),
+            'website' => $request->input('website'),
+            $artist->timePeriods()->sync([$request->timePeriods]),
+            $artist->countries()->sync([$request->countries])
         ]);
-
-        $artist->save();
+        
+        $artist->save(); //the save method is required to generate the new slug
 
         return redirect()->route('artists.show', $artist->slug);
 
@@ -130,8 +148,9 @@ class ArtistController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($slug)
+    public function destroy($artist)
     {
-        //
+        $artist->delete();
+        return redirect('/teachers');
     }
 }
