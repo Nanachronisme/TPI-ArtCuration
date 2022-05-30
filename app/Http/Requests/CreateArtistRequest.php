@@ -23,9 +23,8 @@ class CreateArtistRequest extends FormRequest
      */
     public function rules()
     {
+        //fields required for creating and updating artists
         return [
-            //fields required for creating and updating artists
-            //the max value required are taken from the max database values
             'artistName' => 'required|string|max:130',
             'originalName' => 'string|max:130',
             'birthDate' => 'nullable:max:20',
@@ -38,7 +37,8 @@ class CreateArtistRequest extends FormRequest
             'website5' => 'nullable',
             'slug' => 'alpha_dash', 'unique:artists',
             'timePeriods' => 'required',
-            'countries' => 'nullable'
+            'countries' => 'nullable',
+            'tags' => 'nullable'
         ];
     }
 }
