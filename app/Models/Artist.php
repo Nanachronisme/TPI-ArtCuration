@@ -67,14 +67,42 @@ class Artist extends Model
      */
     public function scopeFilter($query, array $filters)
     {
-        //searching filters using queryBuilder when() function 
-        $query->when($filters['searchArtists'] ?? false, function ($query, $search)
+        //dd($filters);
+        
+        //Name
+        $query->when($filters['search'] ?? false, function ($query, $search)
         {
-            $query
-                ->where('artist_name', 'like', '%' . $search . '%')
-                ->orWhere('original_name', 'like', '%' . $search . '%');
+            //The query must be grouped since an OR statement is used "orWhere()"
+            //not grouping it will have an Or statement for all the subsquent additive queries
+            $query->where(function($query) use($search){
+                $query
+                    ->where('artist_name', 'like', '%' . $search . '%')
+                    ->orWhere('original_name', 'like', '%' . $search . '%'); 
+            });
+
         });
 
+        //Time Period
+        $query->when($filters['timePeriod'] ?? false, function ($query, $timePeriod)
+        {
+             $query
+                 ->whereHas('timePeriods', function($query) use ($timePeriod){
+                     $query->where('id', $timePeriod);
+                 });
+        });
+
+        //Country
+        $query->when($filters['country'] ?? false, function ($query, $country)
+        {
+            $query
+                ->whereHas('countries', function($query) use ($country) {
+                    $query->where('id', $country );
+            });
+            
+            //dd($query->toSql());
+        });
+            
+        
     }
 
     

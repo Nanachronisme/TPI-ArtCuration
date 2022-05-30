@@ -33,16 +33,36 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        //in case an artist has no artworks
-        $placeholder = 'https://via.placeholder.com/900';
+       // dd(request());
 
-        //dd(Artist::first()->artworks->first()->image_path);
-        return view('search.search-artists', [
+        
+       // $countries = DB::table('artist_country')->select('artist_id')->where('country_id', request(['country']));
+
+        $data = [
             'artists' => Artist::latest()
-                    ->filter(request(['search']))
+                     //ease the processing of large datasets
+                    ->filter(request(['search','timePeriod','country']))
                     ->paginate(12),
-            'placeholder' => $placeholder
-        ]);
+            'placeholder' => Artist::PLACEHOLDER,
+            'timePeriods' => TimePeriod::all(),
+            'countries' => Country::all(),
+        ];
+        //dd($data['artists']);
+        
+        return view('search.search-artists')->with($data);
+        
+    }
+
+    /**
+     * Redirects to a random artist
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function random()
+    {
+        $artist = Artist::all()->random();
+
+        return redirect()->route('artists.show', $artist->slug);
     }
 
     /**

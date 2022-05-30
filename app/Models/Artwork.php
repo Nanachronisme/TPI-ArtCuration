@@ -56,6 +56,57 @@ class Artwork extends Model
     }
 
     /**
+     * Permits search filtering
+     *
+     * @param $query
+     * @param array $filters
+     * @return void
+     */
+    public function scopeFilter($query, array $filters)
+    {
+        //searching filters using queryBuilder when() function 
+        $query->when($filters['search'] ?? false, function ($query, $search)
+        {
+            $query->where(function($query) use($search){
+                $query
+                    ->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('original_title', 'like', '%' . $search . '%');
+            });
+
+        });
+
+        //Category
+        $query->when($filters['category'] ?? false, function ($query, $category)
+        {
+                $query
+                    ->whereHas('type', function($query) use ($category){
+                        $query->where('id', $category);
+                    });
+        });
+
+        //Time Period
+        $query->when($filters['timePeriod'] ?? false, function ($query, $timePeriod)
+        {
+                $query
+                    ->whereHas('timePeriod', function($query) use ($timePeriod){
+                        $query->where('id', $timePeriod);
+                    });
+        });
+
+        //Medium
+        $query->when($filters['medium'] ?? false, function ($query, $medium)
+        {
+                $query
+                    ->whereHas('mediums', function($query) use ($medium){
+                        $query->where('id', $medium);
+                    });
+        });
+
+
+
+    }
+
+    /**
      * Get the artwork author or authors
      *
      */

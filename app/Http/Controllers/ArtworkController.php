@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use App\Models\Artwork;
 use App\Models\Medium;
+use App\Models\TimePeriod;
 use App\Models\Type;
 use Illuminate\Http\Request;
 
@@ -34,11 +35,16 @@ class ArtworkController extends Controller
      */
     public function index()
     {
-        return view('search.search-artists', [
-            'artists' => Artwork::latest()
-                ->filter(request(['search']))
-                ->paginate(10) 
-        ]);
+        $data = [
+            'artworks' => Artwork::latest()
+                    ->filter(request(['search', 'category', 'timePeriod', 'medium']))
+                    ->paginate(16),
+            'timePeriods' => TimePeriod::all(),
+            'mediums' => Medium::all(),
+            'categories' => Type::all(),
+        ];
+        //TODO pass data with chunks
+        return view('search.search-artworks', $data);
     }
 
     /**
