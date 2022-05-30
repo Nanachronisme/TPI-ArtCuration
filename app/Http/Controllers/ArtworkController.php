@@ -1,20 +1,23 @@
 <?php
 /**
- * Auteur: Larissa De Barros
+ * Author: Larissa De Barros
  * Date: 19.05.2022
- * Description: 
+ * Description: Controls all logic related to Artworks
  */
 
 //TODO add another param slug to function docs
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateArtworkRequest;
+use App\Http\Requests\UpdateArtworkRequest;
 use App\Models\Artist;
 use App\Models\Artwork;
 use App\Models\Medium;
 use App\Models\TimePeriod;
 use App\Models\Type;
-use Illuminate\Http\Request;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\File as FacadesFile;
 
 class ArtworkController extends Controller
 {
@@ -68,9 +71,41 @@ class ArtworkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(CreateArtworkRequest $request, Artist $artist)
+    {        
+        $request->validated();   
+
+        $imageName = $this->getArtworkFileName($request->image, $artist->slug, $request->title);
+        //TODO I do not know how to store a full image Path while having it display properly directly
+        //only imageName will be stored for the time being, and the path will be created with
+        //public path method etc...
+        $imagePath  = $imageName;
+        
+        //the slug will be automatically updated because of the "onUpdate" config in sluggable/config.php
+        $artwork = Artwork::create([
+            'title' => $request->input('title'),
+            'original_title' => $request->input('originaltitle'),
+            'creation_date' => $request->input('creationDate'),
+            'dimensions' => $request->input('dimensions'),
+            'description' => $request->input('description'),
+            'source_link' => $request->input('sourceLink'),
+            'copyright' => $request->input('copyright'), //TODO automatically add original name copyright
+            'image_path' => $imagePath, //placeholder location, since image_path cannot be null
+            'type_id' => $request->input('category'),
+            //using the associate function would be preferable but I do not know how to use it 
+            //without errors for required fields
+            'artist_id' => $artist->id,
+            'time_period_id' => $request->timePeriod,
+        ]);
+
+        //nullable foreign key requests
+        $artwork->mediums()->attach($request->mediums);
+        $request->tags ? $artwork->tags()->firstOrCreate( ['name' => $request->tags]) : '' ;
+        
+        $request->image->move(public_path('artworks'), $imageName);
+        //dd($artwork->image_path, $imagePath, public_path('artworks'), asset($imagePath,$imageName));
+
+        return redirect()->route('artists.artworks.show', [$artist->slug, $artwork->slug]);
     }
 
     /**
@@ -85,7 +120,7 @@ class ArtworkController extends Controller
             'artwork' => Artwork::where('slug', $artworkSlug)->firstOrFail(),
             'artist' => Artist::where('slug', $artistSlug)->firstOrFail()
         ];
-        //dd($data['artwork']);
+
         return view('show-artwork')->with($data);
     }
 
@@ -103,7 +138,7 @@ class ArtworkController extends Controller
             'categories' => Type::all(),
             'mediums' => Medium::all()
         ];
-        //dd($data['artwork']);
+        //dd($data['artwork']->mediums->has(3), $data['artwork']->mediums->contains(3));
         return view('admin.edit-artwork')->with($data);
     }
 
@@ -114,27 +149,52 @@ class ArtworkController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $artistSlug, $artworkSlug)
+    public function update(UpdateArtworkRequest $request, Artist $artist, Artwork $artwork)
     {
-        $artwork = Artwork::where("slug", $artworkSlug)->firstOrFail();
-        
         $request->validated();
-        //the slug will be automatically update because of the "onUpdate" config in sluggable/config.php
+        
+        //verify if new image file name is required
+        //TODO this function is not ideal since it cannot distinguish
+        //between old and new image with same name and dimensions
+        $oldPath = $artwork->image_path;
+        if(isset($request->image))
+        {
+            $newImageName = $this->getArtworkFileName($request->image, $artist->slug, $request->title);
+        }
+        else
+        {
+            $newImageName = $oldPath;
+        }
+        
+        //dd(isset($request->tags));
+        //the slug will be automatically updated because of the "onUpdate" config in sluggable/config.php
         $artwork->update([
-            'title' => $request->input('artistName'),
-            'original_title' => $request->input('originalName'),
+            'title' => $request->input('title'),
+            'original_title' => $request->input('originalTitle'),
             'creation_date' => $request->input('creationDate'),
             'dimensions' => $request->input('dimensions'),
             'description' => $request->input('description'),
             'source_link' => $request->input('sourceLink'),
-            'image_path' => $request->input('imagePath'),
-            $artwork->timePeriod()->associate([$request->timePeriods]),
-            $artwork->tags()->sync([$request->tags])
+            'image_path' => $newImageName,
+            'copyright' => $request->input('copyright'),
+            $artwork->timePeriod()->associate($request->timePeriod),
+            $artwork->mediums()->sync( $request->mediums ?? [] ),
+            $request->tags ? $artwork->tags()->firstOrCreate( ['name' => $request->tags]) : ''
         ]);
-        
-        $artwork->save(); //the save method is required to generate the new slug
 
-        return redirect()->route('artists.artworks.show', $artistSlug, $artwork->slug);
+        //dd($artwork->image_path);
+        //delete old image and upload the new one
+        if (isset($request->image)) 
+        {
+            if (FacadesFile::exists($oldPath)) 
+            {
+                FacadesFile::delete($oldPath);
+            }
+
+            $request->image->move(public_path('artworks'), $newImageName);
+        }
+
+        return redirect()->route('artists.artworks.show', [$artist->slug, $artwork->slug]);
     }
 
     /**
@@ -143,8 +203,37 @@ class ArtworkController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($slug)
+    public function destroy($artistSlug, $artworkSlug) //nested resource do not allow removal of one parameter
     {
-        //
+        $artwork = Artwork::where('slug', $artworkSlug)->firstOrFail();
+
+        if (FacadesFile::exists($artwork->image_path)) 
+        {
+            FacadesFile::delete($artwork->image_path);
+        }
+
+        $artwork->delete();
+        
+        return redirect()->route('home');
+
+    }
+
+    /**
+     * Will generate the Artwork FileName using convention: 
+     * ArtistSlug-ArtworkSlug-WidthxHeight.extension
+     *
+     * @param $image
+     * @param string $artistSlug
+     * @param string $artworkTitle
+     * @return string
+     */
+    private function getArtworkFileName($image, string $artistSlug, string $artworkTitle) :string
+    {
+        //we have to generate the slug directly since the items has not yet been created
+        $artworkSlug = SlugService::createSlug(Artwork::class, 'slug', $artworkTitle);
+        $width = getimagesize($image)[0];
+        $height = getimagesize($image)[1];
+        $newImageName = $artistSlug . '-' . $artworkSlug . '-' . $width . 'x' .$height . '.' . $image->extension();
+        return $newImageName;
     }
 }

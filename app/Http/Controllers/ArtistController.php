@@ -1,8 +1,8 @@
 <?php
 /**
- * Auteur: Larissa De Barros
+ * Author: Larissa De Barros
  * Date: 19.05.2022
- * Description: 
+ * Description: Controls all logic related to Artists
  */
 
 namespace App\Http\Controllers;
@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateArtistRequest;
 use App\Models\Artist;
 use App\Models\Country;
+use App\Models\Tag;
 use App\Models\TimePeriod;
 use App\Models\Type;
 use Illuminate\Http\Request;
@@ -102,8 +103,11 @@ class ArtistController extends Controller
         ]);
         
         //foreign key requests should be done after a save so artist id is already created
+        //$request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : ''
         $artist->timePeriods()->attach($request->timePeriods); 
-        $artist->countries()->attach($request->countries); 
+        $artist->countries()->attach($request->countries);
+        $request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : '' ;
+
         
         return redirect()->route('artists.show', $artist->slug);
     }
@@ -117,7 +121,7 @@ class ArtistController extends Controller
     public function show($slug)
     {
         $artist = Artist::where('slug', $slug)->firstOrFail();  
-        
+
         return view('show-artist')->with('artist', $artist);
     }
 
@@ -130,7 +134,7 @@ class ArtistController extends Controller
     public function edit($slug)
     {
         $data = [
-            'artist' => Artist::where("slug", $slug)->firstOrFail(), //TODO change all to slugs after testing
+            'artist' => Artist::where("slug", $slug)->firstOrFail(),
             'countries' => Country::all(),
             'categories' => Type::all(),
             'timePeriods' => TimePeriod::all(),
@@ -148,13 +152,13 @@ class ArtistController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateArtistRequest $request, $slug)
+    public function update(CreateArtistRequest $request, Artist $artist)
     {
-        
-        $artist = Artist::where("slug", $slug)->firstOrFail();
-        
+                
         $request->validated();
-        //the slug will be automatically update because of the "onUpdate" config in sluggable/config.php
+
+        //the slug will be automatically updated because 
+        //of the "onUpdate" config in sluggable/config.php
         $artist->update([
             'artist_name' => $request->input('artistName'),
             'original_name' => $request->input('originalName'),
@@ -162,11 +166,11 @@ class ArtistController extends Controller
             'death_date' => $request->input('deathDate'),
             'description' => $request->input('description'),
             'website' => $request->input('website'),
+            //TODO add possibility to assign new tags
+            $request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : '' ,
             $artist->timePeriods()->sync([$request->timePeriods]),
             $artist->countries()->sync([$request->countries])
         ]);
-        
-        $artist->save(); //the save method is required to generate the new slug
 
         return redirect()->route('artists.show', $artist->slug);
 
@@ -178,9 +182,10 @@ class ArtistController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($artist)
+    public function destroy($slug)
     {
+        $artist = Artist::where('slug', $slug)->firstOrFail();
         $artist->delete();
-        return redirect('/teachers');
+        return redirect()->route('home');
     }
 }
