@@ -17,6 +17,16 @@ use Illuminate\Http\Request;
 class ArtistController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('admin')->except('index', 'random', 'show');
+    }
+    
+    /**
      * Redirects to the Artist Search page
      *
      * @return \Illuminate\Http\Response

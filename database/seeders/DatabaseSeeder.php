@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
         //verify if timePeriod is empty, so it won't run constants classes twice
         if(!TimePeriod::exists())
         {
+            $this->call(UsersTableSeeder::class);
             $this->call(ConstantsTableSeeder::class);
         }
         
