@@ -15,6 +15,7 @@
         leave empty if unknown/not applicable. <br>
         Required fields are marked with an *
     </div>
+    
     <!--Name-->
     <div class="flex gap-4">
         <div class="mb-2 w-1/2">
@@ -62,7 +63,7 @@
     <div class="mb-4">
         <div class="text-lg">Country</div>
         <div class="text-sm mb-2">The country of appartenance or artist's ethnicity</div>
-        <select class="mb-2" name="countries">
+        <select class="mb-2 mr-4" name="countries">
             <option value="">Country</option>
             @foreach ( $countries as $country )
                 <option value="{{ $country->id }}" 
@@ -90,7 +91,7 @@
         <x-label class="text-lg" >Artist Links :</x-label>
         <div class="flex">
             <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-300 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                https://
+                URL
             </span>
             <input type="url" name="website" class="px-4 mr-4 rounded-none rounded-r-md" placeholder="Add artist personal website or related websites" 
                     value="@isset($artist) {{$artist->websites()->first()}} @endisset"/> {{--//TODO add multiple websites selection--}}
@@ -99,12 +100,14 @@
     </div>
 
     <!--Tags-->
-    {{-- TODO add a tag suggestion list --}}
+    {{-- TODO add a tag suggestion list 
+        Tags are not functional yet, I can't assign them yet
+        --}}
     <div class="mb-8">
-        <x-label class="text-lg" >Artist Tags :</x-label>
+        <x-label class="text-lg" for="tagsId" >Artist Tags :</x-label>
         <div class="text-sm mb-4">Tags are short descriptive terms for search purposes</div> 
         <div class="flex">
-            <input class="px-4 mr-4 rounded-none rounded-r-md" placeholder="tag1, tag2,"/>
+            <input class="px-4 mr-4 rounded-none rounded-r-md" name="tags" id="tagsId" placeholder="tag1, tag2,"/>
             <x-button type="button">Add</x-button>
         </div>
         <div class="text-xs text-gray-500"> example: surrealist, fantasy, war paintings...</div>

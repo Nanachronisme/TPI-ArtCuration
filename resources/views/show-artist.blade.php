@@ -5,29 +5,37 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="flex flex-col justify-center items-center">
             <div class="div h-2/5">
-                <img class="mb-3" src="{{ $artist->artworks->first()->image_path }}" {{-- //TODO replace with artwork --}}
+                <img class="mb-3" src="@if($artist->artworks->isNotEmpty()){{ $artist->artworks->first()->image_path }} @endif" {{-- //TODO replace with artwork --}}
                     alt="Bonnie image">
             </div>
             <h1 class="text-3xl">{{{$artist->artist_name}}}</h1>
             <h2 class="mb-2 text-2xl">{{{$artist->original_name}}}</h2>
 
-            <div class="flex flex-col w-3/5 mb-4">
+            <x-admin-edit-buttons create="{{route('artists.create')}}"
+                                    edit="{{route('artists.edit', [$artist->slug])}}"
+                                    destroy="{{route('artists.destroy', [$artist->slug])}}">
+            </x-admin-edit-buttons>
 
-                <div class="text-2xl">
+            <div class="flex flex-col w-3/5 mb-4">
+                <div class="text-2xl mb-2">
                     Tags :
                     <span>
                         @isset($artist->tags)
                             @foreach ($artist->tags as $tag)
-                                {{$tag->name}}
+                                <x-pill>
+                                    {{$tag->name}}
+                                </x-pill>
                             @endforeach
                         @endisset
                     </span>
                 </div>
                 <div class="text-2xl">
                     Websites :
-                    <span>
+                    <span class="flex flex-col">
                         @foreach ( $artist->websites() as $website )
-                            {{ $website }}
+                            <span>
+                                {{ $website }}
+                            </span>
                         @endforeach
                     </span>
                 </div>
@@ -68,15 +76,20 @@
                     </div>
                 </div>
                 <h2 class="text-3xl mb-2">Artworks</h2>
-                <div class="grid mb-4 grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                    @foreach ($artist->artworks as $artwork)
-                        <x-card-artwork artistSlug="{{$artist->slug}}"
-                                        artworkSlug="{{$artwork->slug}}"
-                                        image="{{$artwork->image_path}}"
-                                        >
-                        </x-card-artwork>
-                    @endforeach
-                </div>
+                <x-button-link class="bg-pink-700 text-white font-semi hover:bg-pink-900 w-32 mb-4" href="{{route('artists.artworks.create', [$artist->slug])}}">
+                    Add Artwork
+                </x-button-link>
+                @if($artist->artworks->isNotEmpty())
+                    <x-partials.artworks-gallery>
+                        @foreach ($artist->artworks as $artwork)
+                            <x-card-artwork artistSlug="{{$artist->slug}}"
+                                            artworkSlug="{{$artwork->slug}}"
+                                            image="{{$artwork->image_path}}"
+                                            title="{{$artwork->title}}">
+                            </x-card-artwork>
+                        @endforeach
+                    </x-partials.artworks-gallery>
+                @endif
             </div>
         </div>
     </div>
