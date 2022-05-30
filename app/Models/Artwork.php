@@ -1,6 +1,6 @@
 <?php
 /**
- * Auteur: Larissa De Barros
+ * Author: Larissa De Barros
  * Date: 19.05.2022
  * Description: 
  */
@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,7 +27,11 @@ class Artwork extends Model
         'image_path',
         'creation_date',
         'copyright',
-        'timePeriod_id'
+        'type_id',
+        'time_period_id',
+        'artist_id',
+        'tags',
+        'mediums'
     ];
 
     /**

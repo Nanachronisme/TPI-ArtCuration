@@ -1,6 +1,6 @@
 <?php
 /**
- * Auteur: Larissa De Barros
+ * Author: Larissa De Barros
  * Date: 19.05.2022
  * Description: 
  */

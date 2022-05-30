@@ -1,6 +1,6 @@
 <?php
 /**
- * Auteur: Larissa De Barros
+ * Author: Larissa De Barros
  * Date: 19.05.2022
  * Description: 
  */
@@ -8,12 +8,18 @@
 namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Artist extends Model
 {
     use HasFactory, Sluggable;
+
+    /**
+     * Image placeholder for Artists with no artworks
+     */
+    public const PLACEHOLDER = 'https://via.placeholder.com/900';
 
     //defines which data entries can be entered in the web application
     protected $fillable = [
@@ -28,6 +34,7 @@ class Artist extends Model
         'website3',
         'website4',
         'website5',
+        'tags'
     ];
 
     /**
@@ -40,11 +47,13 @@ class Artist extends Model
         return [
             'slug' => [
                 'source' => 'artist_name'
-            ]
+            ],
+
+            //'onUpdate' => [true]  //enable slug to change on each update  
+
         ];
     }
 
-        
     /**
      * Get the route key for the model.
      *
@@ -134,7 +143,7 @@ class Artist extends Model
     }
 
     /**
-     * Get the artist Time Period
+     * Get the artist Time Periods
      *
      */
     public function timePeriods()
@@ -149,7 +158,7 @@ class Artist extends Model
      */
     public function websites()
     {
-        return $websites = collect([
+        return collect([
             'website1' => $this->website1,
             'website2' => $this->website2,
             'website3' => $this->website3,
