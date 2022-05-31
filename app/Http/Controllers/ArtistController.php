@@ -94,6 +94,13 @@ class ArtistController extends Controller
 
         //the create method will automatically save the result
         //the slug will be automatically generated after creation of the asset
+        /*
+        $test = new Artist();
+        $test->artist_name = $request->artistName;
+        $test->original_name = $request->originalName;
+        $test->save();
+        $test->timePeriods()->attach($request->timePeriods); */
+
         $artist = Artist::create([
             'artist_name' => $request->input('artistName'),
             'original_name' => $request->input('originalName'),
@@ -101,11 +108,9 @@ class ArtistController extends Controller
             'death_date' => $request->input('deathDate'),
             'description' => $request->input('description'),
         ]);
-        
         //foreign key requests should be done after a save so artist id is already created
-        //$request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : ''
         $artist->timePeriods()->attach($request->timePeriods); 
-        $artist->countries()->attach($request->countries);
+        $artist->countries()->sync($request->countries ? [$request->countries] : []);
         $request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : '' ;
 
         
@@ -156,6 +161,7 @@ class ArtistController extends Controller
     {
                 
         $request->validated();
+        //dd($request);
 
         //the slug will be automatically updated because 
         //of the "onUpdate" config in sluggable/config.php
@@ -169,8 +175,9 @@ class ArtistController extends Controller
             //TODO add possibility to assign new tags
             $request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : '' ,
             $artist->timePeriods()->sync([$request->timePeriods]),
-            $artist->countries()->sync([$request->countries])
+            $artist->countries()->sync( $request->countries ? [$request->countries] : [])
         ]);
+        //dd($request->originalName, $artist->original_name, $request->input('originalName'));
 
         return redirect()->route('artists.show', $artist->slug);
 

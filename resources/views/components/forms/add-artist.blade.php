@@ -23,8 +23,8 @@
             <input class="w-full" type="text" name="artistName" placeholder="Artist's most used name, or pseudonym" value="@isset($artist){{ $artist->artist_name }} @endisset"/>
         </div>
         <div class="mb-4 w-1/2">
-            <x-label for="orignalName">Original Name :</x-label>
-            <input class="w-full" type="text" name="orignalName" placeholder="Artist full name in it's original language" value="@isset($artist){{ $artist->orignal_name }} @endisset" />
+            <x-label for="originalName">Original Name :</x-label>
+            <input class="w-full" type="text" name="originalName" placeholder="Artist full name in it's original language" value="@isset($artist){{ $artist->original_name }} @endisset" />
         </div>
     </div>
 
@@ -81,10 +81,7 @@
     </div>
 
     
-    <div class="mb-2">
-        <x-label class="text-lg" for="description">Description</x-label>
-        <textarea class="w-full h-24" type="text" name="description" value="@isset($artist){{ $artist->description }} @endisset"></textarea>
-    </div>
+
     
     <!--Artist Websites-->
     <div class="mb-2">
