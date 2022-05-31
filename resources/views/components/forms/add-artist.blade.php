@@ -81,6 +81,11 @@
     </div>
 
     
+    <div class="mb-2">
+        <x-label class="text-lg" for="description">Description</x-label>
+        {{-- tabs are counted in the value given b< the input, using attribute value doesn't work either. --}}
+        <textarea class="w-full h-24" type="text" name="description">{{ $artist->description ?? '' }}</textarea>
+    </div>
 
     
     <!--Artist Websites-->

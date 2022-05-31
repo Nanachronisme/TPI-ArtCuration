@@ -1,4 +1,4 @@
-@props(['artist1', 'artist2', 'artist3', 'placeholder'])
+@props(['artist1', 'artist2' => null, 'artist3' => null, 'placeholder'])
 
 <div id="default-carousel" class="relative mb-8" data-carousel="slide">
 
@@ -10,24 +10,23 @@
                 <span
                     class="absolute top-1/2 left-1/2 text-2xl font-semibold text-white -translate-x-1/2 -translate-y-1/2 sm:text-3xl dark:text-gray-800">First
                     Slide</span>
-                <img src="{{ $artist1->artworks->first()->image_path ?? $placeholder }}"
+                <img src="{{ isset($artist1) && isset($artist1->artworks->first()->image_path) ? asset('artworks/' . $artist1->artworks->first()->image_path) : $placeholder }}"
                     class="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt="{{$artist1->artist_name}}">
             </a>
         </div>
 
         <div class="duration-700 ease-in-out absolute inset-0 transition-all transform translate-x-full z-10"
             data-carousel-item="">
-            <a href="{{ route('artists.show', $artist2) }}">
-                <img src="{{ $artist2->artworks->first()->image_path ?? $placeholder }}"
-                    class="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt="{{$artist2->artist_name}}">
+            <a href="{{ isset($artist2) ? route('artists.show', $artist2) : '' }}">
+                <img src="{{ isset($artist2) && isset($artist2->artworks->first()->image_path) ? asset('artworks/' . $artist2->artworks->first()->image_path) : $placeholder }}"
+                    class="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt="{{$artist2->artist_name ?? 'placeholder image'}}">
             </a>
         </div>
-
         <div class="duration-700 ease-in-out absolute inset-0 transition-all transform -translate-x-full z-10"
             data-carousel-item="">
-            <a href="{{ route('artists.show', $artist3) }}">
-            <img src="{{ $artist3->artworks->first()->image_path ?? $placeholder }}"
-                class="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt="{{$artist3->artist_name}}">
+            <a href="{{ isset($artist3) ? route('artists.show', $artist3) : '' }}">
+                <img src="{{ isset($artist3) && isset($artist3->artworks->first()->image_path) ? asset('artworks/' . $artist3->artworks->first()->image_path) : $placeholder }}"
+                    class="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt="{{$artist3->artist_name ?? 'placeholder image'}}">
             </a>
         </div>
     </div>

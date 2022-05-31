@@ -18,15 +18,20 @@
                     {{--//TODO make the carousel dynamic--}}
                     
                     <x-partials.carousel :artist1="$artists->first()"
-                                        :artist2="$artists->skip(1)->first()"
-                                        :artist3="$artists->skip(2)->first()"
-                                        placeholder={{$placeholder}}>
+                                    :artist2="$artists->skip(1)->first() ?? $artists->skip(1)->first()" 
+                                    :artist3="$artists->skip(2)->first() ?? $artists->skip(2)->first()" 
+                                    placeholder={{$placeholder}}>
                     </x-carousel>
 
                     <h1 class="mb-2 text-3xl">Latest Artworks</h1>
                     
                     <x-partials.artworks-gallery>
                         @foreach ($artworks as $artwork)
+                            <x-card-artwork image="{{$artwork->image_path}}" 
+                                artistSlug="{{$artwork->artist->slug}}"
+                                artworkSlug="{{$artwork->slug}}"
+                                title="{{$artwork->title}}">
+                            </x-card-artwork>
                             @if ($loop->last)
                                 <a href="{{route('search.artworks')}}">
                                     <div class= "h-full flex justify-center items-center rounded-lg border border-gray-200 shadow-md hover:bg-indigo-300">
@@ -35,12 +40,6 @@
                                         </div>
                                     </div>
                                 </a>
-                            @else
-                                <x-card-artwork image="{{ $artwork->image_path}}" 
-                                                artistSlug="{{$artwork->artist->slug}}"
-                                                artworkSlug="{{$artwork->slug}}"
-                                                title="{{$artwork->title}}">
-                                </x-card-artwork>
                             @endif
                         @endforeach
                     </x-partials.artworks-gallery>

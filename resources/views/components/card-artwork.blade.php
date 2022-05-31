@@ -3,7 +3,7 @@
 <a href="{{route('artists.artworks.show', [ $artistSlug , $artworkSlug])}}">
     <div {{ $attributes->merge(['class' => "bg-gray-600 rounded-lg border border-gray-200 shadow-md"]) }}>
         <div class="flex flex-col items-center hover:opacity-60">
-                <img class="object-contain h-48 w-full" src="{{ $image }}"
+                <img class="object-contain h-48 w-full" src="{{ asset('artworks/' . $image) }}"
                     alt="{{$title}}">
         </div>
         {{-- I don't know why but the component doesnt display special characters, it only works if htmlspecialchars_decode is used --}}

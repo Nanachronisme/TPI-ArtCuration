@@ -26,9 +26,6 @@
         <x-label for="imageId">Select image: </x-label>
         <input type="file" id="imageId" name="image" accept="image/*"
                 value="@isset($artwork) {{$artwork->image_path}} @endisset">
-        {{--This field is only there for display purposes--}}
-        <input type="text" class="w-full"
-                value="@isset($artwork) {{$artwork->image_path}} @endisset">
     </div>
 
     <!--Image Source Link-->
@@ -99,8 +96,7 @@
     <!--Description-->
     <div class="flex flex-col mb-2">
         <x-label class="text-lg" for="artworkDescriptionID">Work Description</x-label>
-        <textarea id="artworkDescripstionID" name="artworkDescription"
-            value="@isset($artwork) {{ $artwork->description }} @endisset"></textarea>
+        <textarea id="artworkDescripstionID" name="artworkDescription">{{ $artwork->description ?? '' }}</textarea>
     </div>
 
     <!--Category-->
@@ -122,7 +118,7 @@
     <!--Mediums-->
     <fieldset>
         <legend class="text-lg">Mediums :</legend>
-        <div class="flex gap-2"> 
+        <div class="flex flex-wrap gap-2"> 
             @foreach ($mediums as $medium)
                 <div class="flex items-center mb-4">
                     <input id="{{ $medium->name }}" name="mediums[]" type="checkbox" 
