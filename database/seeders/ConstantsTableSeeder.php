@@ -1,6 +1,6 @@
 <?php
 /**
- * Auteur: Larissa De Barros
+ * Author: Larissa De Barros
  * Date: 19.05.2022
  * Description: Creates all the constants necessary for the inner working of the App
  */
@@ -36,28 +36,70 @@ class ConstantsTableSeeder extends Seeder
             [ 'period' => '1800-1899'],
             [ 'period' => '1700-1799'],
             [ 'period' => '1600-1699'],
+            [ 'period' => '1500-1599'],
+            [ 'period' => '1400-1499'],
+            [ 'period' => '1300-1399'],
+            [ 'period' => '1200-1299'],
+            [ 'period' => '1100-1199'],
+            [ 'period' => '1000-1099'],
+            [ 'period' => '1000-1099'],
+            [ 'period' => '0-99'],
+            [ 'period' => '500BC-0'],
+            [ 'period' => '8000BC-499BC'],
+            [ 'period' => 'FarPast-8000BC'],
         ]);
 
+        //medium names were mostly taken from wikiart
         DB::table('mediums')->insert([
-            [ 'name' => 'Acrylics'],
-            [ 'name' => 'Oil'],
             [ 'name' => 'Digital'],
+            [ 'name' => 'Oil'],
+            [ 'name' => 'Pastel'],
+            [ 'name' => 'Acrylics'],
+            [ 'name' => 'Watercolor'],
+            [ 'name' => 'Charcoal'],
+            [ 'name' => 'Graphite'],
+            [ 'name' => 'Colored Markers'],
+            [ 'name' => 'Mixed Media'],
+            [ 'name' => 'Paper'],
+            [ 'name' => 'Photography'],
+            [ 'name' => 'Tempera'],
+            [ 'name' => 'Fresco'],
+            [ 'name' => 'Wax'],
+            [ 'name' => 'Encaustic'],
+            [ 'name' => 'Pencil'],
+            [ 'name' => 'Gold'],
+            [ 'name' => 'Bronze'],
+            [ 'name' => 'Clay'],
+            [ 'name' => 'Wood'],
+            [ 'name' => 'Porcelain'],
         ]);
 
         DB::table('countries')->insert([
             ['name' => 'Afghanistan'],
-
             ['name' => 'Åland Islands'],
-
             ['name' => 'Albania'],
-
             ['name' => 'Algeria'],
-
             ['name' => 'American Samoa'],
-
             ['name' => 'Andorra'],
-
-            ['name' => 'Angola'],
+            ['name' => 'Angola'], 
+            ['name' => 'China'],  
+            ['name' => 'Japan'],  
+            ['name' => 'South Korea'],
+            ['name' => 'Taiwan'],
+            ['name' => 'Thailand'],
+            ['name' => 'USA'],  
+            ['name' => 'France'],  
+            ['name' => 'Italy'],
+            ['name' => 'Switzerland'],
+            ['name' => 'Austria'],
+            ['name' => 'The United Kingdom of Great Britain and Northern Ireland'],
+            ['name' => 'Mexico'],
+            ['name' => 'Germany'],
+            ['name' => 'Canada'],
+            ['name' => 'Czech Republic'],
+            ['name' => 'Denmark'],
+            ['name' => 'Russia'],
+            ['name' => 'Poland'],
         ]);
 
     }

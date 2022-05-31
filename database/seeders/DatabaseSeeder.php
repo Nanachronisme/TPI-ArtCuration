@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Artist;
 use App\Models\Artwork;
 use App\Models\Country;
+use App\Models\Medium;
 use App\Models\Tag;
 use App\Models\TimePeriod;
 use Illuminate\Database\Seeder;
@@ -18,32 +19,35 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //Instantiate all the constants required for the application running
-        //verify if timePeriod is empty, so it won't run constants classes twice
+        //Data that should be only inserted once
         if(!TimePeriod::exists())
         {
             $this->call(UsersTableSeeder::class);
             $this->call(ConstantsTableSeeder::class);
+            $this->call(TagsTableSeeder::class);
+            $this->call(FirstArtistSeeder::class);
         }
-        
-        Tag::factory(30)->create();
 
-        //Insertion of informations in pivot Tables, better solutions might exist but I did not find them yet. 
-        //I did not find another suitable way to do so
-        Artist::factory(10)->create()->each(function ($artist){
-            //many to many relationships can only be defined afterthe artist
+        //Tag::factory(30)->create();
+        /*
+        Artist::factory(50)->create()->each(function ($artist){
+            //many to many relationships can only be defined after the artist
             $artist->timePeriods()->sync( TimePeriod::pluck('id')->random());
             $artist->countries()->sync( Country::pluck('id')->random());
             $artist->tags()->sync( Tag::pluck('id')->random(5));
         });
 
-        
-        Artwork::factory(10)->create()->each(function ($artwork){
+        Artwork::factory(20)->create()->each(function ($artwork){
             //chooses a random timePeriod from the author's available timePeriods
-            $artwork->timePeriod()->associate(TimePeriod::find(Artist::find($artwork->artist_id)->timePeriods->pluck('id')->random()));
+            $artwork->timePeriod()->associate(TimePeriod::find(
+                Artist::find($artwork->artist_id)->timePeriods
+                    ->pluck('id')
+                    ->random()
+            ));
+            $artwork->mediums()->sync( Medium::pluck('id')->random(2));
             $artwork->tags()->sync( Tag::pluck('id')->random(5));
-            $artwork->save(); //ABSOLUMENT METTRE SAVE SINON ASSOCIATE NE FONCTIONNE PAS
-        });
-
+            $artwork->save(); //save makes sure associate methods are stored
+        }); 
+        */
     }
 }
