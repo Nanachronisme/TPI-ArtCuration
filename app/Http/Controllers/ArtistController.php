@@ -94,13 +94,6 @@ class ArtistController extends Controller
 
         //the create method will automatically save the result
         //the slug will be automatically generated after creation of the asset
-        /*
-        $test = new Artist();
-        $test->artist_name = $request->artistName;
-        $test->original_name = $request->originalName;
-        $test->save();
-        $test->timePeriods()->attach($request->timePeriods); */
-
         $artist = Artist::create([
             'artist_name' => $request->input('artistName'),
             'original_name' => $request->input('originalName'),
@@ -109,6 +102,7 @@ class ArtistController extends Controller
             'description' => $request->input('description'),
         ]);
         //foreign key requests should be done after a save so artist id is already created
+        //$request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : ''
         $artist->timePeriods()->attach($request->timePeriods); 
         $artist->countries()->sync($request->countries ? [$request->countries] : []);
         $request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : '' ;
@@ -145,8 +139,6 @@ class ArtistController extends Controller
             'timePeriods' => TimePeriod::all(),
         ];
 
-        //dd($artist->websites()->first());
-
         return view('admin.edit-artist')->with($data);
     }
 
@@ -161,7 +153,6 @@ class ArtistController extends Controller
     {
                 
         $request->validated();
-        //dd($request);
 
         //the slug will be automatically updated because 
         //of the "onUpdate" config in sluggable/config.php
