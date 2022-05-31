@@ -25,7 +25,7 @@ class Artist extends Model
     protected $fillable = [
         'slug',
         'artist_name',
-        'artist_original_name',
+        'original_name',
         'birth_date',
         'death_date',
         'description',
