@@ -32,11 +32,11 @@ class CreateArtworkRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'originalTitle' => 'nullable|string|max:255',
-            'creationDate' => 'nullable:max:20',
-            'dimensions' => 'nullable:max:255',
-            'description' => 'nullable',
-            'image' => 'required|image|mimes:jpg,png,jpeg|max:5048', //max size in Kilobytes
-            'sourceLink' => 'required',
+            'creationDate' => 'nullable|max:20',
+            'dimensions' => 'nullable|max:255',
+            'description' => 'nullable|max:1500',
+            'image' => 'required|image|mimes:jpg,png,jpeg|max:2048|dimensions:max_width=2000,max_height=2000', //max size in Kilobytes
+            'sourceLink' => 'required:max:2048',
             'copyright' => 'required|max:64',
             'slug' => 'alpha_dash', 'unique:artworks',
             'timePeriod' => 'required',
