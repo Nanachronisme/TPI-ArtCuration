@@ -42,8 +42,8 @@ class ConstantsTableSeeder extends Seeder
             [ 'period' => '1200-1299'],
             [ 'period' => '1100-1199'],
             [ 'period' => '1000-1099'],
-            [ 'period' => '1000-1099'],
-            [ 'period' => '0-99'],
+            [ 'period' => '500-999'],
+            [ 'period' => '0-499'],
             [ 'period' => '500BC-0'],
             [ 'period' => '8000BC-499BC'],
             [ 'period' => 'FarPast-8000BC'],
@@ -87,9 +87,10 @@ class ConstantsTableSeeder extends Seeder
             ['name' => 'South Korea'],
             ['name' => 'Taiwan'],
             ['name' => 'Thailand'],
-            ['name' => 'USA'],  
+            ['name' => 'United States'],  
             ['name' => 'France'],  
             ['name' => 'Italy'],
+            ['name' => 'Spain'],
             ['name' => 'Switzerland'],
             ['name' => 'Austria'],
             ['name' => 'The United Kingdom of Great Britain and Northern Ireland'],
@@ -100,6 +101,8 @@ class ConstantsTableSeeder extends Seeder
             ['name' => 'Denmark'],
             ['name' => 'Russia'],
             ['name' => 'Poland'],
+            ['name' => 'Greece'],
+            ['name' => 'Egypt'],
         ]);
 
     }

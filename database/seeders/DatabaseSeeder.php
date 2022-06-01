@@ -25,9 +25,13 @@ class DatabaseSeeder extends Seeder
             $this->call(UsersTableSeeder::class);
             $this->call(ConstantsTableSeeder::class);
             $this->call(TagsTableSeeder::class);
-            $this->call(FirstArtistSeeder::class);
         }
-
+        if(!Artist::exists())
+        {
+            
+            $this->call(FirstArtistsSeeder::class);
+        }
+        
         //Tag::factory(30)->create();
         /*
         Artist::factory(50)->create()->each(function ($artist){
