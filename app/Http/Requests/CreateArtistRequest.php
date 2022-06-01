@@ -38,7 +38,7 @@ class CreateArtistRequest extends FormRequest
             'slug' => 'alpha_dash', 'unique:artists',
             'timePeriods' => 'required',
             'countries' => 'nullable',
-            'tags' => 'nullable'
+            'tags' => 'nullable|max:50'
         ];
     }
 }

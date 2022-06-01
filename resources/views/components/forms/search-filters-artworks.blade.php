@@ -31,3 +31,18 @@
         @endforeach
     </select>
 </div>
+
+<!--Order by-->
+<div class="">
+    <select class="" name="order">
+            <option value="latest" {{ request('order') == 'latest' || '' ? 'selected' : '' }}>
+                Latest
+            </option>
+            <option value="oldest" {{ request('order') == 'oldest' ? 'selected' : '' }}>
+                Oldest
+            </option>
+            <option value="alphabetical" {{ request('order') == 'alphabetical' ? 'selected' : '' }}>
+                Alphabetical
+            </option>
+    </select>
+</div>

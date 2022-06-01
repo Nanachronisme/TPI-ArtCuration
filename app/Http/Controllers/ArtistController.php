@@ -34,22 +34,18 @@ class ArtistController extends Controller
      */
     public function index()
     {
-       // dd(request());
-
-        
-       // $countries = DB::table('artist_country')->select('artist_id')->where('country_id', request(['country']));
-
+       //une partie de la logique reprise sur https://stackoverflow.com/questions/62488456/laravel-order-by-asc-desc-with-button-or-a-href
         $data = [
             'artists' => Artist::latest()
-                     //ease the processing of large datasets
-                    ->filter(request(['search','timePeriod','country']))
+                    //TODO add chunks to ease the processing of large datasets
+                    ->filter(request(['search','timePeriod','country', 'order']))
                     ->paginate(12),
             'placeholder' => Artist::PLACEHOLDER,
             'timePeriods' => TimePeriod::all(),
             'countries' => Country::all(),
         ];
         //dd($data['artists']);
-        
+
         return view('search.search-artists')->with($data);
         
     }

@@ -41,7 +41,8 @@ class CreateArtworkRequest extends FormRequest
             'slug' => 'alpha_dash', 'unique:artworks',
             'timePeriod' => 'required',
             'category' => 'required',
-            'mediums' => 'nullable'
+            'mediums' => 'nullable',
+            'tags' => 'nullable|max:50'
         ];
     }
 }

@@ -69,6 +69,26 @@ class Artwork extends Model
      */
     public function scopeFilter($query, array $filters)
     {
+        //Reordering
+        if(isset($filters['order']))
+        {
+            if($filters['order'] == 'latest' )
+            {
+                $query
+                    ->reorder()->latest();
+            }
+            elseif($filters['order'] == 'oldest' )
+            {
+                $query
+                    ->reorder()->oldest();
+            }
+            elseif($filters['order'] == 'alphabetical' )
+            {
+                $query
+                    ->reorder('title','asc');
+            }
+        }
+
         //searching filters using queryBuilder when() function 
         $query->when($filters['search'] ?? false, function ($query, $search)
         {
@@ -106,8 +126,6 @@ class Artwork extends Model
                         $query->where('id', $medium);
                     });
         });
-
-
 
     }
 

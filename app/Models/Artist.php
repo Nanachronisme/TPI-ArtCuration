@@ -19,7 +19,7 @@ class Artist extends Model
     /**
      * Image placeholder for Artists with no artworks
      */
-    public const PLACEHOLDER = 'https://via.placeholder.com/900';
+    public const PLACEHOLDER = 'placeholder.png';
 
     //defines which data entries can be entered in the web application
     protected $fillable = [
@@ -76,8 +76,26 @@ class Artist extends Model
      */
     public function scopeFilter($query, array $filters)
     {
-        //dd($filters);
-        
+        //Reordering
+        if(isset($filters['order']))
+        {
+            if($filters['order'] == 'latest' )
+            {
+                $query
+                    ->reorder()->latest();
+            }
+            elseif($filters['order'] == 'oldest' )
+            {
+                $query
+                    ->reorder()->oldest();
+            }
+            elseif($filters['order'] == 'alphabetical' )
+            {
+                $query
+                    ->reorder('artist_name','asc');
+            }
+        }
+
         //Name
         $query->when($filters['search'] ?? false, function ($query, $search)
         {
@@ -94,10 +112,10 @@ class Artist extends Model
         //Time Period
         $query->when($filters['timePeriod'] ?? false, function ($query, $timePeriod)
         {
-             $query
-                 ->whereHas('timePeriods', function($query) use ($timePeriod){
-                     $query->where('id', $timePeriod);
-                 });
+            $query
+                ->whereHas('timePeriods', function($query) use ($timePeriod){
+                    $query->where('id', $timePeriod);
+                });
         });
 
         //Country

@@ -40,7 +40,7 @@ class ArtworkController extends Controller
     {
         $data = [
             'artworks' => Artwork::latest()
-                    ->filter(request(['search', 'category', 'timePeriod', 'medium']))
+                    ->filter(request(['search', 'category', 'timePeriod', 'medium', 'order']))
                     ->paginate(16),
             'timePeriods' => TimePeriod::all(),
             'mediums' => Medium::all(),
@@ -154,8 +154,6 @@ class ArtworkController extends Controller
         $request->validated();
         
         //verify if new image file name is required
-        //TODO this function is not ideal since it cannot distinguish
-        //between old and new image with same name and dimensions
         $oldPath = $artwork->image_path;
         if(isset($request->image))
         {
@@ -233,7 +231,7 @@ class ArtworkController extends Controller
         $artworkSlug = SlugService::createSlug(Artwork::class, 'slug', $artworkTitle);
         $width = getimagesize($image)[0];
         $height = getimagesize($image)[1];
-        $newImageName = $artistSlug . '-' . $artworkSlug . '-' . $width . 'x' .$height . '.' . $image->extension();
+        $newImageName = $artistSlug . '-' . $artworkSlug . '-' . $width . 'x' .$height . '.' .  time() . $image->extension();
         return $newImageName;
     }
 }
