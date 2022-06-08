@@ -18,7 +18,8 @@
         <div class="duration-700 ease-in-out absolute inset-0 transition-all transform translate-x-full z-10"
             data-carousel-item="">
             <a href="{{ isset($artist2) ? route('artists.show', $artist2) : '' }}">
-                <img src="{{ isset($artist2) && isset($artist2->artworks->first()->image_path) ? asset('artworks/' . $artist2->artworks->first()->image_path) : $placeholder }}"
+                <img src="{{ isset($artist2) && isset($artist2->artworks->first()->image_path) ? 
+                asset('artworks/' . $artist2->artworks->first()->image_path) : $placeholder }}"
                     class="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2" alt="{{$artist2->artist_name ?? 'placeholder image'}}">
             </a>
         </div>

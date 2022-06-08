@@ -6,7 +6,11 @@
         <div class="flex justify-center">
             <div class="my-6 px-6 py-8 w-3/5 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 <h1 class="mb-2 text-3xl">Add Artist</h1>
-                <x-forms.add-artist route="{{ route('artists.store') }}" :categories="$categories" :timePeriods="$timePeriods" :countries="$countries"></x-forms.add-artist>
+                <x-forms.add-artist route="{{ route('artists.store') }}" 
+                                    :categories="$categories" 
+                                    :timePeriods="$timePeriods" 
+                                    :countries="$countries">
+                </x-forms.add-artist>
             </div>
         </div>
     </div>

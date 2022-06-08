@@ -5,8 +5,16 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="flex flex-col justify-center items-center">
             <div class="div h-2/5">
-                <img class="mb-3" src="@if($artist->artworks->isNotEmpty()){{ asset('artworks/' . $artist->artworks->first()->image_path)}} @endif" {{-- //TODO replace with artwork --}}
-                    alt="Bonnie image">
+                <img class="mb-3" 
+                @if($artist->artworks->isNotEmpty())                
+                    @if (filter_var($artist->artworks->first()->image_path, FILTER_VALIDATE_URL))
+                        src="{{$artist->artworks->first()->image_path}}"
+                        alt="{{$artist->artworks->first()->title}}"
+                    @else
+                        src="{{asset('artworks/' . $artist->artworks->first()->image_path)}}"
+                        alt="{{$artist->artworks->first()->title}}"
+                    @endif
+                @endif> 
             </div>
             <h1 class="text-3xl text-center max">{{{$artist->artist_name}}}</h1>
             <h2 class="mb-2 text-2xl text-center w-3/5">{{{$artist->original_name}}}</h2>

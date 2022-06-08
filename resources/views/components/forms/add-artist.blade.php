@@ -115,10 +115,8 @@
         <div class="text-xs text-gray-500"> example: surrealist, fantasy, war paintings...</div>
     </div>
 
-    </span>
         {{-- //TODO find a way to request current route with more elegance --}}
-        <x-button type="submit" name="btnSubmit">{{ str_contains(request()->route()->getName(), 'edit') ? 'Edit' : 'Add Artist' }}</x-button>
-    </span>
+        <x-button class="mb-2" type="submit" name="btnSubmit">{{ str_contains(request()->route()->getName(), 'edit') ? 'Edit' : 'Add Artist' }}</x-button>
 
     <!-- Error Messages -->
     <x-auth-validation-errors class="mb-4" :errors="$errors" />

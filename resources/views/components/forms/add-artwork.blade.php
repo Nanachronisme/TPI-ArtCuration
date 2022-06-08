@@ -169,7 +169,7 @@
         <div class="text-xs text-gray-500"> example: surrealist, fantasy, war paintings...</div>
     </div>
 
-    <x-button type="submit" name="submit">{{ isset($artwork) ? 'Edit Artwork' : 'Add Artwork' }}</x-button>
+    <x-button class="mb-2" type="submit" name="submit">{{ isset($artwork) ? 'Edit Artwork' : 'Add Artwork' }}</x-button>
     
     <!--Error validation-->
     <x-auth-validation-errors class="mb-4" :errors="$errors" />
