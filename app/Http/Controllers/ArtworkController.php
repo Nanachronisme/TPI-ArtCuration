@@ -5,8 +5,6 @@
  * Description: Controls all logic related to Artworks
  */
 
-//TODO add another param slug to function docs
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateArtworkRequest;
@@ -46,7 +44,7 @@ class ArtworkController extends Controller
             'mediums' => Medium::all(),
             'categories' => Type::all(),
         ];
-        //TODO pass data with chunks
+        
         return view('search.search-artworks', $data);
     }
 
@@ -76,10 +74,9 @@ class ArtworkController extends Controller
         $request->validated();   
 
         $imageName = $this->getArtworkFileName($request->image, $artist->slug, $request->title);
-        //TODO I do not know how to store a full image Path while having it display properly directly
+        //I do not know how to store a full image Path while having it display properly directly
         //only imageName will be stored for the time being, and the path will be created with
         //public path method etc...
-        $imagePath  = $imageName;
         
         //the slug will be automatically updated because of the "onUpdate" config in sluggable/config.php
         $artwork = Artwork::create([
@@ -89,21 +86,19 @@ class ArtworkController extends Controller
             'dimensions' => $request->input('dimensions'),
             'description' => $request->input('description'),
             'source_link' => $request->input('sourceLink'),
-            'copyright' => $request->input('copyright'), //TODO automatically add original name copyright
-            'image_path' => $imagePath, //placeholder location, since image_path cannot be null
+            'copyright' => $request->input('copyright'),
+            'image_path' => $imageName,
             'type_id' => $request->input('category'),
             //using the associate function would be preferable but I do not know how to use it 
             //without errors for required fields
             'artist_id' => $artist->id,
             'time_period_id' => $request->timePeriod,
         ]);
-
         //nullable foreign key requests
         $artwork->mediums()->attach($request->mediums);
         $request->tags ? $artwork->tags()->firstOrCreate( ['name' => $request->tags]) : '' ;
         
         $request->image->move(public_path('artworks'), $imageName);
-        //dd($artwork->image_path, $imagePath, public_path('artworks'), asset($imagePath,$imageName));
 
         return redirect()->route('artists.artworks.show', [$artist->slug, $artwork->slug]);
     }
@@ -180,13 +175,12 @@ class ArtworkController extends Controller
             $request->tags ? $artwork->tags()->firstOrCreate( ['name' => $request->tags]) : ''
         ]);
 
-        //dd($artwork->image_path);
         //delete old image and upload the new one
         if (isset($request->image)) 
         {
-            if (FacadesFile::exists($oldPath)) 
+            if (FacadesFile::exists(public_path('artworks/' . $oldPath))) 
             {
-                FacadesFile::delete($oldPath);
+                FacadesFile::delete(public_path('artworks/' . $oldPath));
             }
 
             $request->image->move(public_path('artworks'), $newImageName);
@@ -205,9 +199,9 @@ class ArtworkController extends Controller
     {
         $artwork = Artwork::where('slug', $artworkSlug)->firstOrFail();
 
-        if (FacadesFile::exists($artwork->image_path)) 
+        if (FacadesFile::exists(public_path('artworks/' . $artwork->image_path))) 
         {
-            FacadesFile::delete($artwork->image_path);
+            FacadesFile::delete(public_path('artworks/' . $artwork->image_path));
         }
 
         $artwork->delete();
