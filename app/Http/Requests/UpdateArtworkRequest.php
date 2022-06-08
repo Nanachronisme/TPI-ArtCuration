@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Author: Larissa De Barros
+ * Date: 19.05.2022
+ * Description: Contains all validations rules and parameters for updating artworks
+ */
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;

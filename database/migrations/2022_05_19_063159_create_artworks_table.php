@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('dimensions')->nullable();
             $table->string('source_link', 2048);
             $table->string('description', 1500)->nullable();
-            $table->string('image_path', 2048); //TODO verify length, corresponds to maximum file path
+            $table->string('image_path', 2048); 
             $table->string('creation_date', 30)->nullable();
             $table->string('copyright');
             $table->foreignIdFor(Artist::class)->constrained()->onDelete('cascade'); //TODO make relationship many to many

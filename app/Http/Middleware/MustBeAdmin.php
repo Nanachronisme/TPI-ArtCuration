@@ -25,7 +25,7 @@ class MustBeAdmin
 
         if (!(auth()->user()?->is_admin)) 
         {
-            //returns an error 403
+            //returns a 403 error 
             abort(HttpFoundationResponse::HTTP_FORBIDDEN);
         }
 

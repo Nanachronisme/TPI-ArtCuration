@@ -2,7 +2,7 @@
 /**
  * Author: Larissa De Barros
  * Date: 19.05.2022
- * Description: 
+ * Description: Contains all data and logic related to the home page
  */
 
 namespace App\Http\Controllers;
@@ -10,14 +10,12 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use App\Models\Artwork;
 use App\Models\Tag;
-use App\Models\TimePeriod;
 use App\Models\Type;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     /**
-     * Home Page
+     * Returns the Home Page
      *
      */
     public function index()

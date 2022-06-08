@@ -1,4 +1,9 @@
 <?php
+/**
+ * Author: Larissa De Barros
+ * Date: 19.05.2022
+ * Description: Contains all functions and configurations related to Medium data
+ */
 
 namespace App\Models;
 

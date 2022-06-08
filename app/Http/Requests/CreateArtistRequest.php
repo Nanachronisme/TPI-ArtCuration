@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Author: Larissa De Barros
+ * Date: 19.05.2022
+ * Description: Contains all validations rules and parameters for creating and updatings Artists
+ */
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -13,7 +17,7 @@ class CreateArtistRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; //TODO set false for unauthorized users
+        return true;
     }
 
     /**
@@ -26,7 +30,7 @@ class CreateArtistRequest extends FormRequest
         //fields required for creating and updating artists
         return [
             'artistName' => 'required|string|max:130',
-            'originalName' => 'string|max:130',
+            'originalName' => 'nullable|string|max:130',
             'birthDate' => 'nullable|max:20',
             'deathDate' => 'nullable|max:20',
             'description' => 'nullable|max:1500',

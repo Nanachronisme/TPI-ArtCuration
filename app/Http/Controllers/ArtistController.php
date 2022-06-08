@@ -34,20 +34,16 @@ class ArtistController extends Controller
      */
     public function index()
     {
-       //une partie de la logique reprise sur https://stackoverflow.com/questions/62488456/laravel-order-by-asc-desc-with-button-or-a-href
         $data = [
             'artists' => Artist::latest()
-                    //TODO add chunks to ease the processing of large datasets
                     ->filter(request(['search','timePeriod','country', 'order']))
-                    ->paginate(12),
+                    ->paginate(16),
             'placeholder' => Artist::PLACEHOLDER,
             'timePeriods' => TimePeriod::all(),
             'countries' => Country::all(),
         ];
-        //dd($data['artists']);
 
         return view('search.search-artists')->with($data);
-        
     }
 
     /**
@@ -74,7 +70,7 @@ class ArtistController extends Controller
             'timePeriods' => TimePeriod::all(),
             'countries' => Country::all()
         ];
-        return view('admin.create-artist')->with($data); //TODO uniformise the passing of data, with() or , $data)
+        return view('admin.create-artist')->with($data);
     }
 
     /**
@@ -98,12 +94,10 @@ class ArtistController extends Controller
             'description' => $request->input('description'),
         ]);
         //foreign key requests should be done after a save so artist id is already created
-        //$request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : ''
         $artist->timePeriods()->attach($request->timePeriods); 
         $artist->countries()->sync($request->countries ? [$request->countries] : []);
         $request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : '' ;
 
-        
         return redirect()->route('artists.show', $artist->slug);
     }
 
@@ -117,7 +111,7 @@ class ArtistController extends Controller
     {
         $artist = Artist::where('slug', $slug)->firstOrFail();  
 
-        return view('show-artist')->with('artist', $artist);
+        return view('show.show-artist')->with('artist', $artist);
     }
 
     /**
@@ -146,8 +140,7 @@ class ArtistController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(CreateArtistRequest $request, Artist $artist)
-    {
-                
+    {      
         $request->validated();
 
         //the slug will be automatically updated because 
@@ -159,15 +152,12 @@ class ArtistController extends Controller
             'death_date' => $request->input('deathDate'),
             'description' => $request->input('description'),
             'website' => $request->input('website'),
-            //TODO add possibility to assign new tags
             $request->tags ? $artist->tags()->firstOrCreate( ['name' => $request->tags]) : '' ,
             $artist->timePeriods()->sync([$request->timePeriods]),
             $artist->countries()->sync( $request->countries ? [$request->countries] : [])
         ]);
-        //dd($request->originalName, $artist->original_name, $request->input('originalName'));
 
         return redirect()->route('artists.show', $artist->slug);
-
     }
 
     /**

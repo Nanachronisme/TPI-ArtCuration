@@ -2,7 +2,7 @@
 /**
  * Author: Larissa De Barros
  * Date: 19.05.2022
- * Description: 
+ * Description: Contains all validations rules and parameters for creating artworks
  */
 
 namespace App\Http\Requests;

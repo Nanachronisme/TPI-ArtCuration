@@ -2,7 +2,7 @@
 /**
  * Author: Larissa De Barros
  * Date: 19.05.2022
- * Description: 
+ * Description: Contains all functions and configurations related to TimePeriod data
  */
 
 namespace App\Models;

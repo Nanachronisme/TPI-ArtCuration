@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Author: Larissa De Barros
  * Date: 19.05.2022
- * Description: 
+ * Description: Contains all functions and configurations related to Artist data
  */
 
 namespace App\Models;
@@ -48,9 +49,6 @@ class Artist extends Model
             'slug' => [
                 'source' => 'artist_name'
             ],
-
-            //'onUpdate' => [true]  //enable slug to change on each update  
-
         ];
     }
 
@@ -65,10 +63,8 @@ class Artist extends Model
         return 'slug';
     }
 
-
-
     /**
-     * Permits search filtering
+     * Create queries with filters provided.
      *
      * @param $query
      * @param array $filters
@@ -77,62 +73,49 @@ class Artist extends Model
     public function scopeFilter($query, array $filters)
     {
         //Reordering
-        if(isset($filters['order']))
-        {
-            if($filters['order'] == 'latest' )
-            {
+        if (isset($filters['order'])) {
+            if ($filters['order'] == 'latest') {
                 $query
                     ->reorder()->latest();
-            }
-            elseif($filters['order'] == 'oldest' )
-            {
+            } elseif ($filters['order'] == 'oldest') {
                 $query
                     ->reorder()->oldest();
-            }
-            elseif($filters['order'] == 'alphabetical' )
-            {
+            } elseif ($filters['order'] == 'alphabetical') {
                 $query
-                    ->reorder('artist_name','asc');
+                    ->reorder('artist_name', 'asc');
             }
         }
 
         //Name
-        $query->when($filters['search'] ?? false, function ($query, $search)
-        {
+        $query->when($filters['search'] ?? false, function ($query, $search) {
             //The query must be grouped since an OR statement is used "orWhere()"
-            //not grouping it will have an Or statement for all the subsquent additive queries
-            $query->where(function($query) use($search){
+            //not grouping it will have an Or statement for all the subsquent
+            //queries
+            $query->where(function ($query) use ($search) {
                 $query
                     ->where('artist_name', 'like', '%' . $search . '%')
-                    ->orWhere('original_name', 'like', '%' . $search . '%'); 
+                    ->orWhere('original_name', 'like', '%' . $search . '%');
             });
-
         });
 
         //Time Period
-        $query->when($filters['timePeriod'] ?? false, function ($query, $timePeriod)
-        {
+        $query->when($filters['timePeriod'] ?? false, function ($query, $timePeriod) {
             $query
-                ->whereHas('timePeriods', function($query) use ($timePeriod){
-                    $query->where('id', $timePeriod);
-                });
+            ->whereHas('timePeriods', function ($query) use ($timePeriod) {
+                $query->where('id', $timePeriod);
+            });
+        });
+        
+        //Country
+        $query->when($filters['country'] ?? false, function ($query, $country) {
+            $query
+            ->whereHas('countries', function ($query) use ($country) {
+                $query->where('id', $country);
+            });
         });
 
-        //Country
-        $query->when($filters['country'] ?? false, function ($query, $country)
-        {
-            $query
-                ->whereHas('countries', function($query) use ($country) {
-                    $query->where('id', $country );
-            });
-            
-            //dd($query->toSql());
-        });
-            
-        
     }
 
-    
     /**
      * Get the artist's artworks
      *
@@ -184,5 +167,4 @@ class Artist extends Model
             'website5' => $this->website5
         ]);
     }
-
 }
