@@ -116,7 +116,7 @@ class ArtworkController extends Controller
             'artist' => Artist::where('slug', $artistSlug)->firstOrFail()
         ];
 
-        return view('show-artwork')->with($data);
+        return view('show.show-artwork')->with($data);
     }
 
     /**
@@ -225,7 +225,8 @@ class ArtworkController extends Controller
         $artworkSlug = SlugService::createSlug(Artwork::class, 'slug', $artworkTitle);
         $width = getimagesize($image)[0];
         $height = getimagesize($image)[1];
-        $newImageName = $artistSlug . '-' . $artworkSlug . '-' . $width . 'x' .$height . '.' .  time() . $image->extension();
+        $newImageName = $artistSlug . '-' . $artworkSlug . '-' 
+        . $width . 'x' .$height . '.' .  time() . $image->extension();
         return $newImageName;
     }
 }
