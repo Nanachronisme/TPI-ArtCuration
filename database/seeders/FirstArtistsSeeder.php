@@ -1,4 +1,9 @@
 <?php
+/**
+ * Author: Larissa De Barros
+ * Date: 19.05.2022
+ * Description: Creates the first Artists in the database as examples.
+ */
 
 namespace Database\Seeders;
 
@@ -40,6 +45,7 @@ class FirstArtistsSeeder extends Seeder
                 'death_date' => 'April 8, 1973',
                 'description' => "Pablo Ruiz Picasso (25 October 1881 – 8 April 1973) was a Spanish painter, sculptor, printmaker, ceramicist and theatre designer who spent most of his adult life in France. Regarded as one of the most influential artists of the 20th century, he is known for co-founding the Cubist movement, the invention of constructed sculpture, the co-invention of collage, and for the wide variety of styles that he helped develop and explore. Among his most famous works are the proto-Cubist Les Demoiselles d'Avignon (1907), and Guernica (1937), a dramatic portrayal of the bombing of Guernica by German and Italian air forces during the Spanish Civil War. 
                 Source: https://en.wikipedia.org/wiki/Pablo_Picasso",
+                'website1' => 'https://www.pablopicasso.org/'
             ], //2
             [
                 'artist_name' => 'Salvador Dali',
@@ -95,13 +101,17 @@ class FirstArtistsSeeder extends Seeder
         
 
         Artist::all()->skip(3)->first()->timePeriods()->sync([1]); 
-        Artist::all()->skip(3)->first()->countries()->sync(Country::where('name', 'United States')->first()->id, Country::where('name', 'Taiwan')->first()->id );
-        Artist::all()->skip(3)->first()->tags()->firstOrCreate( ['name' => 'comics'], ['name' => 'fantasy'], ['name' => 'surrealism']) ;
+        Artist::all()->skip(3)->first()->countries()->sync([Country::where('name', 'United States')->first()->id, Country::where('name', 'Taiwan')->first()->id ]);
+        Artist::all()->skip(3)->first()->tags()->firstOrCreate( ['name' => 'comics']) ;
+        Artist::all()->skip(3)->first()->tags()->firstOrCreate( ['name' => 'fantasy']) ;
+        Artist::all()->skip(3)->first()->tags()->firstOrCreate( ['name' => 'surrealism']) ;
         
 
         Artist::all()->skip(4)->first()->timePeriods()->sync([1]); 
         Artist::all()->skip(4)->first()->countries()->sync(Country::where('name', 'Japan')->first()->id);
-        Artist::all()->skip(4)->first()->tags()->firstOrCreate( ['name' => 'russian animation'], ['name' => 'animation'], ['name' => 'anime']) ;
+        Artist::all()->skip(4)->first()->tags()->firstOrCreate( ['name' => 'russian animation']) ;
+        Artist::all()->skip(4)->first()->tags()->firstOrCreate( ['name' => 'animation']) ;
+        Artist::all()->skip(4)->first()->tags()->firstOrCreate( ['name' => 'anime']) ;
         
         Artist::all()->skip(5)->first()->timePeriods()->sync([]); 
         Artist::all()->skip(5)->first()->countries()->sync(Country::where('name', 'China')->first()->id);
@@ -117,40 +127,7 @@ class FirstArtistsSeeder extends Seeder
             Artist::all()->skip(6)->first()->countries()->attach($country); 
         }
 
-        //Andrew Wyeth Artwork
-        $artwork = Artwork::create([
-            'title' => 'Christina\'s World',
-            'original_title' => 'Christina\'s World',
-            'creation_date' => '1948',
-            'dimensions' => '81.9 cm × 121.3 cm (32+1⁄4 in × 47+3⁄4 in)[',
-            'description' => "Christina's World is a 1948 painting by American painter Andrew Wyeth and one of the best-known American paintings of the mid-20th century. It is a tempera work done in a realist style, depicting a woman semi-reclining on the ground in a treeless, mostly tawny field, looking up at a gray house on the horizon; a barn and various other small outbuildings are adjacent to the house.",
-            'source_link' => 'https://www.moma.org/collection/works/78455',
-            'copyright' => 'Copyrighted Material',
-            'image_path' => 'andrew-wyeth-christinas-world-395x265.jpg',
-            'type_id' => Type::where('name', 'Traditional Painting')->first()->id,
-            'artist_id' => Artist::first()->id,
-            'time_period_id' => 2,
-        ]);
-        $artwork->mediums()->sync( Medium::where('name', 'Tempera')->first()->id);
-        $artwork->tags()->firstOrCreate([Tag::where('name', 'realism')->first()->id]);
 
-        //unknown artist artwork
-        $artwork = Artwork::create([
-            'title' => 'The Angel With Golden Hair',
-            'original_title' => 'Ангел Златые власы, Angel Zlatye Vlasy',
-            'creation_date' => 'c. 1200',
-            'dimensions' => '48.8 cm × 39 cm (19.2 in × 15 in)',
-            'description' => "The Angel with Golden Hair (Russian: Ангел Златые власы, Angel Zlatye Vlasy) is a tempera icon by an unknown Russian artist, painted in the second half of the 12th century. It is displayed in the Russian Museum in Saint Petersburg.
-            Source:https://en.wikipedia.org/wiki/The_Angel_with_Golden_Hair",
-            'source_link' => 'https://www.moma.org/collection/works/78455',
-            'copyright' => 'Public Domain',
-            'image_path' => 'Goldenlocks.jpg',
-            'type_id' => Type::where('name', 'Traditional Painting')->first()->id,
-            'artist_id' => Artist::where('artist_name', 'Unknown Author')->first()->id,
-            'time_period_id' => TimePeriod::where('period', '1200-1299')->first()->id
-        ]);
-        $artwork->mediums()->sync( [Medium::where('name', 'Tempera')->first()->id, Medium::where('name', 'Wood')->first()->id] );
-        $artwork->tags()->firstOrCreate([Tag::where('name', 'icon')->first()->id]);
 
 
     }

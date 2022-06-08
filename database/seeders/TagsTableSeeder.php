@@ -1,4 +1,9 @@
 <?php
+/**
+ * Author: Larissa De Barros
+ * Date: 19.05.2022
+ * Description: Creates some example tags for later assigning
+ */
 
 namespace Database\Seeders;
 

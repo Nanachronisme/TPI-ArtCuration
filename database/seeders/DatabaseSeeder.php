@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //Data that should be only inserted once
+        //Data that should only be inserted once
         if(!TimePeriod::exists())
         {
             $this->call(UsersTableSeeder::class);
@@ -28,13 +28,12 @@ class DatabaseSeeder extends Seeder
         }
         if(!Artist::exists())
         {
-            
             $this->call(FirstArtistsSeeder::class);
+            $this->call(FirstArtworksSeeder::class);
         }
+        Tag::factory(30)->create();
         
-        //Tag::factory(30)->create();
-        /*
-        Artist::factory(50)->create()->each(function ($artist){
+        Artist::factory(30)->create()->each(function ($artist){
             //many to many relationships can only be defined after the artist
             $artist->timePeriods()->sync( TimePeriod::pluck('id')->random());
             $artist->countries()->sync( Country::pluck('id')->random());
@@ -52,6 +51,6 @@ class DatabaseSeeder extends Seeder
             $artwork->tags()->sync( Tag::pluck('id')->random(5));
             $artwork->save(); //save makes sure associate methods are stored
         }); 
-        */
+        
     }
 }

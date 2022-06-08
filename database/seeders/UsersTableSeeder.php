@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Author: Larissa De Barros
+ * Date: 19.05.2022
+ * Description: Creates the administrator
+ */
 namespace Database\Seeders;
 
 use App\Models\User;
