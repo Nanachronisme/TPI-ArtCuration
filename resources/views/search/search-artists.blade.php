@@ -3,9 +3,9 @@
         <x-partials.header-search search="artists">
             Search Artists
             <x-slot name="filters">
-                <x-forms.search-filters-artists :timePeriods="$timePeriods"
-                                                :countries="$countries">
-                </x-forms>                
+                <x-search-filters-artists :timePeriods="$timePeriods" 
+                                            :countries="$countries">
+                </x->
             </x-slot>
         </x-partials.header-search>
 

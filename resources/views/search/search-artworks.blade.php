@@ -3,7 +3,7 @@
         <x-partials.header-search search="artworks">
             Search Artworks
             <x-slot name="filters">
-                <x-forms.search-filters-artworks :timePeriods="$timePeriods"
+                <x-search-filters-artworks :timePeriods="$timePeriods"
                                         :mediums="$mediums"
                                         :categories="$categories">
                 </x-forms>                
