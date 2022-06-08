@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\ArtworkController;
+use App\Http\Controllers\HomeController;
+use App\Http\Middleware\MustBeAdmin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,12 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+//Artwork resource demands an additional parameter 
+Route::prefix('search')->group(function() {
+    Route::get('/artists', [ArtistController::class, 'index'])->name('search.artists');
+    Route::get('/artworks', [ArtworkController::class, 'index'])->name('search.artworks');
+});
+
+Route::get('/artists/random', [ArtistController::class, 'random'])->name('artists.random');
+
+Route::resource('artists', ArtistController::class)->except(['index']);
+
+//artworks is nested into artist, corresponding uris will be like:
+//artists/{artist}/artworks/{artwork}
+Route::resource('artists.artworks', ArtworkController::class)->except(['index']);
 
 require __DIR__.'/auth.php';
